@@ -38,7 +38,6 @@ export const UpdateTransactionModal = ({
   const queryClient = useQueryClient();
 
   const handleSubmit = async (transaction: Transaction) => {
-    console.log(transaction);
     await updateTransaction.mutateAsync(transaction);
     await queryClient.refetchQueries({
       queryKey: [QueryKey.ListAllTransactions],
@@ -83,7 +82,6 @@ export const UpdateTransactionModal = ({
     >
       <form
         onSubmit={form.onSubmit((values) => {
-          console.log(values);
           const record = {
             ...transaction,
             sanitizedDescription: values.sanitizedDescription,

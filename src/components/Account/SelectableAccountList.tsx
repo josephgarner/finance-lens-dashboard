@@ -17,7 +17,6 @@ export const SelectableAccountList = () => {
           className={classes.selected}
           radius="lg"
           p="xl"
-          withBorder
         >
           <Title order={4}>{account.accountName}</Title>
           <Title>{displayCurrency(account.balance!)}</Title>
@@ -31,8 +30,6 @@ export const SelectableAccountList = () => {
 const useStyles = createStyles((theme) => ({
   group: {
     width: "100vw",
-    marginBottom: theme.spacing.md,
-    marginTop: theme.spacing.md,
   },
   selected: {
     marginBottom: theme.spacing.md,

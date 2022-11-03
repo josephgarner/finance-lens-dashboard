@@ -5,41 +5,55 @@ import {
   Group,
   ScrollArea,
   Divider,
-  ActionIcon,
 } from "@mantine/core";
-import { useRunSanitization } from "api/hooks/useRunSanitization";
 import {
   SelectableAccountList,
   TransactionList,
   TransactionActions,
 } from "components";
-import { TbRefreshDot } from "react-icons/tb";
 
 export const Transactions = () => {
   const { classes } = useStyles();
-  const runSanitization = useRunSanitization();
   return (
-    <Container>
-      <Title>Transactions</Title>
+    <Container className={classes.container}>
+      <Title className={classes.title}>Transactions</Title>
       <SelectableAccountList />
       <TransactionActions />
-      <Title order={2}>Outstanding</Title>
-      <ScrollArea style={{ height: 400 }}>
-        <TransactionList unSanitized />
-      </ScrollArea>
-      <Divider className={classes.divider} size="sm" />
-      <Title order={2}>History</Title>
-      <TransactionList />
+      <Group className={classes.sectionGroup}>
+        <Title order={2} className={classes.sectionTitle}>
+          Outstanding
+        </Title>
+        <ScrollArea style={{ height: 400 }}>
+          <TransactionList unSanitized />
+        </ScrollArea>
+      </Group>
+      {/* <Divider className={classes.divider} size="sm" /> */}
+      <Group className={classes.sectionGroup}>
+        <Title order={2} className={classes.sectionTitle}>
+          History
+        </Title>
+        <TransactionList />
+      </Group>
     </Container>
   );
 };
 
 const useStyles = createStyles((theme) => ({
   container: {
-    minWidth: "100vw",
-    padding: theme.spacing.md,
+    marginTop: theme.spacing.xl,
+  },
+  title: {
+    marginBottom: theme.spacing.xl,
   },
   divider: {
     marginBottom: theme.spacing.xl,
+  },
+  sectionGroup: {
+    spacing: 0,
+    width: "100%",
+    marginBottom: theme.spacing.xl,
+  },
+  sectionTitle: {
+    marginBottom: theme.spacing.md,
   },
 }));

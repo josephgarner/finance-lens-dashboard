@@ -4,5 +4,8 @@ import { listAllAccounts } from "api/account/listAllAccounts";
 
 export const useListAllAccounts = () => {
   const queryKey = [QueryKey.ListAllAccounts];
-  return useQuery(queryKey, () => listAllAccounts());
+  return useQuery(queryKey, () => listAllAccounts(), {
+    staleTime: 120000,
+    retry: 1,
+  });
 };

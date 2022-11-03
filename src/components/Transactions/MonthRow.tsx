@@ -16,7 +16,6 @@ export const MonthRow = ({ month }: Props) => {
 
 const useStyles = createStyles((theme) => ({
   group: {
-    marginTop: theme.spacing.lg,
     paddingLeft: theme.spacing.md,
     width: "100%",
     flexDirection: "row",

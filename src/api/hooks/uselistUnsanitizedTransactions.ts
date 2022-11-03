@@ -4,5 +4,7 @@ import { listUnsanitizedTransactions } from "api/transactions/listUnsanitizedTra
 
 export const uselistUnsanitizedTransactions = () => {
   const queryKey = [QueryKey.ListUnsanitizedTransactions];
-  return useQuery(queryKey, () => listUnsanitizedTransactions());
+  return useQuery(queryKey, () => listUnsanitizedTransactions(), {
+    staleTime: 120000,
+  });
 };

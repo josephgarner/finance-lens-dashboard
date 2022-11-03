@@ -5,7 +5,7 @@ import {
   uselistUnsanitizedTransactions,
 } from "api";
 import { MonthRow, TransactionRow } from "components";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Transaction } from "types";
 import { groupByDate } from "utils/groupByDate";
 
@@ -19,9 +19,14 @@ export const TransactionList = ({ unSanitized }: Props) => {
     ? uselistUnsanitizedTransactions()
     : useListAllTransactions();
 
+  const transactions = useMemo(
+    () => (isSuccess ? data.transactions : []),
+    [isSuccess, data?.transactions]
+  );
+
   if (!isSuccess) return <Loader />;
 
-  const groupedTransactions = groupByDate(data.transactions);
+  const groupedTransactions = groupByDate(transactions);
   const uniqueMonths = Object.keys(groupedTransactions);
 
   return (

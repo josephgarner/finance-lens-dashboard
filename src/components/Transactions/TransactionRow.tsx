@@ -31,7 +31,7 @@ export const TransactionRow = ({ transaction }: Props) => {
         transaction={transaction}
         setOpen={setOpenEdit}
       />
-      <Paper className={classes.paper} withBorder>
+      <Paper className={classes.paper}>
         <Group className={classes.group}>
           <Grid sx={{ flexGrow: 4 }}>
             <Grid.Col className={classes.gridCol} span={2}>

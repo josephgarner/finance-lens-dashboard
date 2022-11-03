@@ -11,6 +11,10 @@ export async function get<
 ): Promise<{ result: Response }> {
   const getOptions = {
     searchParams: params,
+    retry: {
+      limit: 2,
+      statusCodes: [408, 413, 429, 500, 502, 503, 504, 405],
+    },
   };
   const baseURL = import.meta.env.VITE_FINANCE_LENS_SERVICE_ADDRESS;
   const port = import.meta.env.VITE_FINANCE_LENS_SERVICE_PORT;

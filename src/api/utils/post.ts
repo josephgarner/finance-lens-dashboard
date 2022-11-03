@@ -10,14 +10,19 @@ type JSONSerializable =
   | { [key: string | number]: JSONSerializable }
   | Array<JSONSerializable>;
 
-export async function post<Body extends JSONSerializable, Response>(
+export async function post<Body extends JSONSerializable | FormData, Response>(
   service: Service,
   endpoint: Endpoint | string,
   body: Body
 ): Promise<{ result: Response }> {
-  const postOptions = {
-    json: body,
-  };
+  const postOptions =
+    body instanceof FormData
+      ? {
+          body: body,
+        }
+      : {
+          json: body,
+        };
   const baseURL = import.meta.env.VITE_FINANCE_LENS_SERVICE_ADDRESS;
   const port = import.meta.env.VITE_FINANCE_LENS_SERVICE_PORT;
 
@@ -25,6 +30,5 @@ export async function post<Body extends JSONSerializable, Response>(
   const response = (await ky.post(url, postOptions).json()) as {
     result: Response;
   };
-
   return response;
 }
