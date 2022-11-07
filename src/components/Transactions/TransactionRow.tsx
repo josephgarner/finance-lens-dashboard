@@ -13,6 +13,7 @@ import { FaEdit } from "react-icons/fa";
 import { UpdateTransactionModal } from "./UpdateTransactionModal";
 import { useState } from "react";
 import { displayDate } from "utils/displayDate";
+import { TbCheck, TbEye } from "react-icons/tb";
 
 type Props = {
   transaction: Transaction;
@@ -33,30 +34,31 @@ export const TransactionRow = ({ transaction }: Props) => {
       />
       <Paper className={classes.paper}>
         <Group className={classes.group}>
-          <Grid sx={{ flexGrow: 4 }}>
-            <Grid.Col className={classes.gridCol} span={2}>
-              <Text>{displayDate(transaction.date)}</Text>
-            </Grid.Col>
-            <Grid.Col className={classes.gridCol} span={2}>
-              <TypeBadge type={transaction.type} />
-              <Text>{transaction.category}</Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>{transaction.vendor}</Text>
-              <Text>
-                {isSanitized
-                  ? transaction.sanitizedDescription
-                  : transaction.rawDescription}
-              </Text>
-            </Grid.Col>
-            <Grid.Col className={classes.gridCol} span={2}>
-              <Text>
-                {displayCurrency(
-                  transaction.debit ? transaction.debit : transaction.credit
-                )}
-              </Text>
-            </Grid.Col>
-          </Grid>
+          {isSanitized ? (
+            <TbCheck className={`${classes.icon} ${classes.tick}`} size={20} />
+          ) : (
+            <TbEye className={`${classes.icon} ${classes.eye}`} size={20} />
+          )}
+          <Group position={"center"} className={classes.dateSectionGroups}>
+            <Text>{displayDate(transaction.date)}</Text>
+
+            <TypeBadge type={transaction.type} />
+          </Group>
+          <Group className={classes.sectionGroups}>
+            <Text>{transaction.vendor}</Text>
+            <Text>{transaction.category}</Text>
+          </Group>
+          <Text className={classes.description}>
+            {isSanitized
+              ? transaction.sanitizedDescription
+              : transaction.rawDescription}
+          </Text>
+          <Text>
+            {displayCurrency(
+              transaction.debit ? transaction.debit : transaction.credit
+            )}
+          </Text>
+
           <ActionIcon color="blue" size="sm" onClick={() => setOpenEdit(true)}>
             <FaEdit size={18} />
           </ActionIcon>
@@ -76,6 +78,22 @@ const useStyles = createStyles((theme) => ({
     width: "100%",
     flexDirection: "row",
     flexWrap: "nowrap",
+  },
+  dateSectionGroups: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  sectionGroups: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  icon: {
+    minWidth: 20,
+  },
+  eye: { color: theme.colors.red[8] },
+  tick: { color: theme.colors.green[8] },
+  description: {
+    flexGrow: 1,
   },
   gridCol: {
     display: "flex",

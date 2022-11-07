@@ -46,7 +46,7 @@ export const CoreNavbar = () => {
             variant="white"
             color="indigo"
           >
-            Sanitizing List
+            Matching List
           </Button>
           <Divider />
           <Button<typeof Link>

@@ -6,7 +6,7 @@ export const SanitizeTransactions = () => {
 
   return (
     <Container className={classes.container}>
-      <Title className={classes.title}>Sanitizing List</Title>
+      <Title className={classes.title}>Transaction Matching List</Title>
       <SanitizationList />
     </Container>
   );

@@ -1,11 +1,4 @@
-import {
-  createStyles,
-  Container,
-  Title,
-  Group,
-  ScrollArea,
-  Divider,
-} from "@mantine/core";
+import { createStyles, Container, Title, Tabs } from "@mantine/core";
 import {
   SelectableAccountList,
   TransactionList,
@@ -19,21 +12,18 @@ export const Transactions = () => {
       <Title className={classes.title}>Transactions</Title>
       <SelectableAccountList />
       <TransactionActions />
-      <Group className={classes.sectionGroup}>
-        <Title order={2} className={classes.sectionTitle}>
-          Outstanding
-        </Title>
-        <ScrollArea style={{ height: 400 }}>
+      <Tabs variant="outline" radius="lg" defaultValue="Outstanding">
+        <Tabs.List>
+          <Tabs.Tab value="Outstanding">Outstanding</Tabs.Tab>
+          <Tabs.Tab value="History">History</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="Outstanding" pt="xs">
           <TransactionList unSanitized />
-        </ScrollArea>
-      </Group>
-      {/* <Divider className={classes.divider} size="sm" /> */}
-      <Group className={classes.sectionGroup}>
-        <Title order={2} className={classes.sectionTitle}>
-          History
-        </Title>
-        <TransactionList />
-      </Group>
+        </Tabs.Panel>
+        <Tabs.Panel value="History" pt="xs">
+          <TransactionList />
+        </Tabs.Panel>
+      </Tabs>
     </Container>
   );
 };
@@ -52,6 +42,8 @@ const useStyles = createStyles((theme) => ({
     spacing: 0,
     width: "100%",
     marginBottom: theme.spacing.xl,
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   sectionTitle: {
     marginBottom: theme.spacing.md,

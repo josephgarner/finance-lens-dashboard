@@ -1,13 +1,17 @@
-import { Box, createStyles, Group, Loader, Text } from "@mantine/core";
 import {
-  useListAllAccounts,
-  useListAllTransactions,
-  uselistUnsanitizedTransactions,
-} from "api";
-import { MonthRow, TransactionRow } from "components";
-import { useEffect, useMemo, useState } from "react";
-import { Transaction } from "types";
+  Alert,
+  createStyles,
+  Group,
+  Select,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { useListAllTransactions, uselistUnsanitizedTransactions } from "api";
+import { LoadingError, MonthRow, TransactionRow } from "components";
+import { useMemo, useState } from "react";
+import { FaInfoCircle } from "react-icons/fa";
 import { groupByDate } from "utils/groupByDate";
+import { matchSorter } from "match-sorter";
 
 type Props = {
   unSanitized?: boolean;
@@ -15,7 +19,9 @@ type Props = {
 
 export const TransactionList = ({ unSanitized }: Props) => {
   const { classes } = useStyles();
-  const { isSuccess, data } = unSanitized
+  const [selectedMonth, setSelectedMonth] = useState("All Months");
+  const [search, setSearch] = useState("");
+  const { isSuccess, isError, data } = unSanitized
     ? uselistUnsanitizedTransactions()
     : useListAllTransactions();
 
@@ -24,26 +30,101 @@ export const TransactionList = ({ unSanitized }: Props) => {
     [isSuccess, data?.transactions]
   );
 
-  if (!isSuccess) return <Loader />;
+  if ((!isSuccess && !isError) || isError) {
+    return <LoadingError success={isSuccess} error={isError} />;
+  }
 
   const groupedTransactions = groupByDate(transactions);
   const uniqueMonths = Object.keys(groupedTransactions);
 
+  if (transactions.length === 0) {
+    return (
+      <Alert
+        icon={<FaInfoCircle size={16} />}
+        color="indigo"
+        radius="lg"
+        className={classes.width100}
+      >
+        {unSanitized ? (
+          <>
+            <Text>
+              This section displays all outstanding transactions that need to be
+              reviewed and matched
+            </Text>
+            <Text>
+              To get started click the Upload Transaction Record button above
+              and upload your first transaction record.
+            </Text>
+          </>
+        ) : (
+          <Text>
+            This section displays all transactions.
+            <Text>
+              To get started click the Upload Transaction Record button above
+              and upload your first transaction record.
+            </Text>
+          </Text>
+        )}
+      </Alert>
+    );
+  }
+
+  const searchTransactions = (month: string) => {
+    if (search)
+      return matchSorter(groupedTransactions[month], search, {
+        keys: ["rawDescription", "sanitizedDescription"],
+      });
+    if (groupedTransactions[month]) return groupedTransactions[month];
+    return [];
+  };
+
   return (
     <Group className={classes.container} position="center">
-      {uniqueMonths.map((month) => {
-        return (
-          <Group key={month}>
-            <MonthRow month={month} />
-            {groupedTransactions[month].map((transaction, index) => (
-              <TransactionRow
-                key={`${index}-${month}`}
-                transaction={transaction}
-              />
-            ))}
-          </Group>
-        );
-      })}
+      <Group className={classes.actionsGroup}>
+        <Group className={classes.filterGroup}>
+          <Select
+            data={["All Months", ...uniqueMonths]}
+            defaultValue={"All Months"}
+            onChange={(value) => setSelectedMonth(value!)}
+            radius="lg"
+          />
+          <Select
+            data={["2022"]}
+            radius="lg"
+            defaultValue={"2022"}
+            // onChange={(event) => TODO}
+          />
+        </Group>
+        <TextInput
+          radius="lg"
+          placeholder="Search"
+          className={classes.searchInput}
+          onChange={(event) => setSearch(event.currentTarget.value)}
+        />
+      </Group>
+      {selectedMonth === "All Months"
+        ? uniqueMonths.map((month) => {
+            return (
+              <Group key={month} className={classes.width100}>
+                <MonthRow
+                  month={month}
+                  count={groupedTransactions[month].length}
+                />
+                {searchTransactions(month).map((transaction, index) => (
+                  <TransactionRow
+                    key={`${index}-${month}`}
+                    transaction={transaction}
+                  />
+                ))}
+              </Group>
+            );
+          })
+        : searchTransactions(selectedMonth).map((transaction, index) => (
+            <TransactionRow
+              key={`${index}-${selectedMonth}`}
+              transaction={transaction}
+            />
+          ))}
     </Group>
   );
 };
@@ -51,5 +132,18 @@ export const TransactionList = ({ unSanitized }: Props) => {
 const useStyles = createStyles((theme) => ({
   container: {
     marginBottom: theme.spacing.md,
+  },
+  width100: {
+    width: "100%",
+  },
+  actionsGroup: {
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  searchInput: {
+    flexGrow: 1,
+  },
+  filterGroup: {
+    justifyContent: "flex-start",
   },
 }));

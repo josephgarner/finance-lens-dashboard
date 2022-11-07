@@ -22,6 +22,7 @@ export type Account = {
 };
 
 export type Sanitization = {
+  id?: string;
   rawDescription: string;
   sanitizedDescription: string;
   type: TransactionType;

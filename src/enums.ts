@@ -6,6 +6,8 @@ export enum Endpoint {
   AddSanitizing = "add-sanitizing",
   RunSanitization = "run-sanitization/:account",
   ListAllSanitizing = "list-sanitizing",
+  UpdateSanitization = "update-sanitizing",
+  DeleteSanitizing = "delete-sanitizing",
 
   ListAllAccounts = "list-all",
 }

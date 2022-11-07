@@ -5,7 +5,6 @@ import { QueryKey } from "enums";
 export const useListAllTransactions = () => {
   const queryKey = [QueryKey.ListAllTransactions];
   return useQuery(queryKey, () => listAllTransactions(), {
-    staleTime: 120000,
     retry: 1,
   });
 };

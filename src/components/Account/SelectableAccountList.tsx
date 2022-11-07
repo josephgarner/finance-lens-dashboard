@@ -1,17 +1,20 @@
 import { createStyles, Group, Loader, Paper, Title } from "@mantine/core";
 import { useListAllAccounts } from "api";
+import { LoadingError } from "components/core";
 import { Account } from "types";
 import { displayCurrency } from "utils/displayCurrency";
 
 export const SelectableAccountList = () => {
   const { classes } = useStyles();
-  const listAccounts = useListAllAccounts();
+  const { isSuccess, isError, data } = useListAllAccounts();
 
-  if (!listAccounts.isSuccess) return <Loader />;
+  if ((!isSuccess && !isError) || isError) {
+    return <LoadingError success={isSuccess} error={isError} />;
+  }
 
   return (
     <Group className={classes.group}>
-      {listAccounts.data.accounts.map((account) => (
+      {data.accounts.map((account) => (
         <Paper
           key={account.accountName}
           className={classes.selected}

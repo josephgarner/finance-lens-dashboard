@@ -13,6 +13,7 @@ import { FaEdit } from "react-icons/fa";
 import { UpdateTransactionModal } from "./UpdateTransactionModal";
 import { useState } from "react";
 import { displayDate } from "utils/displayDate";
+import { UpdateSanitizationModal } from "./UpdateSanitizationModal";
 
 type Props = {
   sanitization: Sanitization;
@@ -25,22 +26,40 @@ export const SanitizationRow = ({ sanitization }: Props) => {
 
   return (
     <>
+      <UpdateSanitizationModal
+        opened={openEdit}
+        sanitization={sanitization}
+        setOpen={setOpenEdit}
+      />
       <Paper className={classes.paper}>
-        <Group className={classes.group}>
-          <TypeBadge type={sanitization.type} />
-
-          <Text>{sanitization.category}</Text>
-
-          <Text>{sanitization.rawDescription}</Text>
-
-          <Text className={classes.description}>
-            {sanitization.sanitizedDescription}
-          </Text>
-
-          <ActionIcon color="blue" size="sm" onClick={() => setOpenEdit(true)}>
-            <FaEdit size={18} />
-          </ActionIcon>
-        </Group>
+        <Grid columns={24}>
+          <Grid.Col span={3}>
+            <TypeBadge type={sanitization.type} />
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Text>{sanitization.category}</Text>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Text>{sanitization.vendor}</Text>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <Text>{sanitization.rawDescription}</Text>
+          </Grid.Col>
+          <Grid.Col span={8}>
+            <Text className={classes.description}>
+              {sanitization.sanitizedDescription}
+            </Text>
+          </Grid.Col>
+          <Grid.Col span={1}>
+            <ActionIcon
+              color="blue"
+              size="sm"
+              onClick={() => setOpenEdit(true)}
+            >
+              <FaEdit size={18} />
+            </ActionIcon>
+          </Grid.Col>
+        </Grid>
       </Paper>
     </>
   );

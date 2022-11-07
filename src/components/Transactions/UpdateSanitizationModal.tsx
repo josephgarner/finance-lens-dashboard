@@ -15,39 +15,35 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { QueryKey, TransactionType } from "enums";
-import { Sanitization, Transaction } from "types";
-import { displayCurrency } from "utils/displayCurrency";
-import { displayDate } from "utils/displayDate";
-import { FaInfoCircle } from "react-icons/fa";
-import { useAddSanitizing, useUpdateTransaction } from "api";
+import { Sanitization } from "types";
+import { useDeleteSanitizing, useUpdateSanitization } from "api";
 import { useQueryClient } from "react-query";
 import { useState } from "react";
 
 type Props = {
   opened: boolean;
   setOpen: (openState: boolean) => void;
-  transaction: Transaction;
+  sanitization: Sanitization;
 };
 
-export const UpdateTransactionModal = ({
+export const UpdateSanitizationModal = ({
   opened = false,
   setOpen,
-  transaction,
+  sanitization,
 }: Props) => {
   const { classes } = useStyles();
   const [loading, setLoading] = useState(false);
-  const updateTransaction = useUpdateTransaction();
-  const addSanitizing = useAddSanitizing();
+  const updateSanitization = useUpdateSanitization();
+  const deleteSanitization = useDeleteSanitizing();
   const queryClient = useQueryClient();
 
   const form = useForm({
     initialValues: {
-      sanitizedDescription: transaction.sanitizedDescription || "",
-      type: transaction.type,
-      category: transaction.category || "",
-      vendor: transaction.vendor || "",
-      useSanitize: false,
-      keyword: transaction.rawDescription,
+      keyword: sanitization.rawDescription || "",
+      sanitizedDescription: sanitization.sanitizedDescription || "",
+      type: sanitization.type,
+      category: sanitization.category || "",
+      vendor: sanitization.vendor || "",
     },
 
     validate: {
@@ -63,29 +59,30 @@ export const UpdateTransactionModal = ({
         /^[a-zA-Z0-9-\s]*$/.test(value)
           ? null
           : "This field can only contain letters, - and numbers",
-      keyword: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
     },
   });
 
-  const handleSubmit = async (transaction: Transaction) => {
+  const handleSubmit = async (sanitization: Sanitization) => {
     setLoading(true);
-    await updateTransaction.mutateAsync(transaction);
+    await updateSanitization.mutateAsync(sanitization);
     await queryClient.refetchQueries({
-      queryKey: [QueryKey.ListAllTransactions],
+      queryKey: [QueryKey.ListAllSanitizing],
     });
-    await queryClient.refetchQueries({
-      queryKey: [QueryKey.ListUnsanitizedTransactions],
-    });
-    setOpen(false);
     form.reset();
+    setOpen(false);
     setLoading(false);
   };
 
-  const handleSanitize = async (sanitized: Sanitization) => {
-    await addSanitizing.mutateAsync(sanitized);
+  const handleDelete = async () => {
+    setLoading(true);
+    console.log(sanitization.id);
+    await deleteSanitization.mutateAsync({ id: sanitization.id! });
+    await queryClient.refetchQueries({
+      queryKey: [QueryKey.ListAllSanitizing],
+    });
+    form.reset();
+    setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -94,7 +91,7 @@ export const UpdateTransactionModal = ({
       onClose={() => {
         setOpen(false), form.reset();
       }}
-      title="Edit transaction"
+      title="Edit matching transaction"
       size="lg"
       radius="lg"
     >
@@ -103,35 +100,16 @@ export const UpdateTransactionModal = ({
         <form
           onSubmit={form.onSubmit((values) => {
             const record = {
-              ...transaction,
+              ...sanitization,
               sanitizedDescription: values.sanitizedDescription,
               type: values.type,
               category: values.category,
               vendor: values.vendor,
             };
-            if (values.useSanitize) {
-              const sanitize = {
-                rawDescription: values.keyword,
-                sanitizedDescription: values.sanitizedDescription,
-                type: values.type,
-                category: values.category,
-                vendor: values.vendor,
-              };
-              handleSanitize(sanitize);
-            }
             handleSubmit(record);
           })}
         >
           <Group className={classes.group}>
-            <Group className={classes.group}>
-              <Title order={3}>{displayDate(transaction.date)}</Title>
-              <Title>
-                {displayCurrency(
-                  transaction.debit ? transaction.debit : transaction.credit
-                )}
-              </Title>
-              <Text align={"center"}>{transaction.rawDescription}</Text>
-            </Group>
             <Group className={classes.group} position={"left"} spacing={"xs"}>
               <Text className={classes.typeLabel}>Transaction Type</Text>
               <Chip.Group
@@ -144,7 +122,6 @@ export const UpdateTransactionModal = ({
                   color="green"
                   variant="filled"
                   size="md"
-                  disabled={transaction.credit ? false : true}
                 >
                   {TransactionType.INCOME}
                 </Chip>
@@ -153,7 +130,6 @@ export const UpdateTransactionModal = ({
                   color="red"
                   variant="filled"
                   size="md"
-                  disabled={transaction.credit ? true : false}
                 >
                   {TransactionType.EXPENSE}
                 </Chip>
@@ -162,21 +138,11 @@ export const UpdateTransactionModal = ({
                   color="yellow"
                   variant="filled"
                   size="md"
-                  disabled={transaction.credit ? true : false}
                 >
                   {TransactionType.TRANSFER}
                 </Chip>
               </Chip.Group>
             </Group>
-            <Textarea
-              className={classes.input}
-              label="New Description"
-              placeholder="Holiday Fish and Chips"
-              radius="lg"
-              withAsterisk
-              required
-              {...form.getInputProps("sanitizedDescription")}
-            />
             <TextInput
               className={classes.input}
               label="Category"
@@ -197,45 +163,32 @@ export const UpdateTransactionModal = ({
               required
               {...form.getInputProps("vendor")}
             />
-            <Checkbox
+            <Textarea
               className={classes.input}
-              label="Use these details to match similar future transactions"
-              {...form.getInputProps("useSanitize")}
+              label="Keyword/s"
+              placeholder="Purchase"
+              radius="lg"
+              withAsterisk
+              required
+              {...form.getInputProps("keyword")}
             />
-            <Collapse
-              className={classes.collapse}
-              in={form.getInputProps("useSanitize").value}
-            >
-              <Group spacing={"lg"}>
-                <Alert
-                  icon={<FaInfoCircle size={16} />}
-                  color="indigo"
-                  radius="lg"
-                >
-                  <Text>
-                    This section is used for the automated matching of
-                    transactions. The details above will be applied to similar
-                    transactions in the future that match the given key work you
-                    provide bellow.
-                  </Text>
-                  <Text>
-                    We suggest taking the unique keyword/s from the description
-                    to ensure the success of the automated matching process
-                  </Text>
-                </Alert>
-                <TextInput
-                  className={classes.input}
-                  label="Keyword match"
-                  description="This value will be used to match the default description of the transaction"
-                  placeholder="Purchase"
-                  radius="lg"
-                  {...form.getInputProps("keyword")}
-                />
-              </Group>
-            </Collapse>
-            <Button radius="lg" type={"submit"}>
-              Update Transaction
-            </Button>
+            <Textarea
+              className={classes.input}
+              label="New Description"
+              placeholder="Holiday Fish and Chips"
+              radius="lg"
+              withAsterisk
+              required
+              {...form.getInputProps("sanitizedDescription")}
+            />
+            <Group>
+              <Button radius="lg" color="red" onClick={() => handleDelete()}>
+                Delete
+              </Button>
+              <Button radius="lg" type={"submit"}>
+                Update Matching Transaction
+              </Button>
+            </Group>
           </Group>
         </form>
       </div>
