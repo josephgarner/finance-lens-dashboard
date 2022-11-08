@@ -6,11 +6,7 @@ import {
   Textarea,
   TextInput,
   Text,
-  Title,
   Button,
-  Collapse,
-  Checkbox,
-  Alert,
   LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -39,7 +35,7 @@ export const UpdateSanitizationModal = ({
 
   const form = useForm({
     initialValues: {
-      keyword: sanitization.rawDescription || "",
+      keyword: sanitization.keywords || [""],
       sanitizedDescription: sanitization.sanitizedDescription || "",
       type: sanitization.type,
       category: sanitization.category || "",
@@ -75,7 +71,7 @@ export const UpdateSanitizationModal = ({
 
   const handleDelete = async () => {
     setLoading(true);
-    console.log(sanitization.id);
+
     await deleteSanitization.mutateAsync({ id: sanitization.id! });
     await queryClient.refetchQueries({
       queryKey: [QueryKey.ListAllSanitizing],
@@ -91,6 +87,7 @@ export const UpdateSanitizationModal = ({
       onClose={() => {
         setOpen(false), form.reset();
       }}
+      closeOnClickOutside={false}
       title="Edit matching transaction"
       size="lg"
       radius="lg"

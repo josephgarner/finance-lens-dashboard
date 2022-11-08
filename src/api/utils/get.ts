@@ -6,7 +6,7 @@ export async function get<
   Response
 >(
   service: Service,
-  endpoint: Endpoint,
+  endpoint: Endpoint | string,
   params: Params
 ): Promise<{ result: Response }> {
   const getOptions = {

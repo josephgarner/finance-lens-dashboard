@@ -2,6 +2,8 @@ export enum Endpoint {
   UploadTransactionRecord = "upload-history",
   ListAllTransactions = "list-all",
   ListUnsanitizedTransactions = "list-unsanitized",
+  ListAllTransactionsPerAccount = "list-all/:account",
+  ListUnsanitizedTransactionsPerAccount = "list-unsanitized/:account",
   UpdateTransaction = "update",
   AddSanitizing = "add-sanitizing",
   RunSanitization = "run-sanitization/:account",
@@ -10,6 +12,7 @@ export enum Endpoint {
   DeleteSanitizing = "delete-sanitizing",
 
   ListAllAccounts = "list-all",
+  CreateAccount = "create",
 }
 
 export enum Service {
@@ -21,6 +24,12 @@ export enum TransactionType {
   EXPENSE = "Expense",
   INCOME = "Income",
   TRANSFER = "Transfer",
+}
+
+export enum AccountType {
+  SPENDING = "Spending",
+  SAVINGS = "Savings",
+  TERMDEPOSIT = "Term Deposit",
 }
 
 export enum QueryKey {

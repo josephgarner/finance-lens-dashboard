@@ -2,14 +2,15 @@ import { Alert, createStyles, Group, Loader } from "@mantine/core";
 import { FaInfoCircle } from "react-icons/fa";
 
 type Props = {
-  success: boolean;
   error: boolean;
+  isFetching?: boolean;
+  isSuccess?: boolean;
 };
 
-export const LoadingError = ({ success, error }: Props) => {
+export const LoadingError = ({ error, isFetching, isSuccess }: Props) => {
   const { classes } = useStyles();
 
-  if (!success && !error)
+  if (isFetching || (!isSuccess && !error))
     return (
       <Group className={classes.container}>
         <Loader size="lg" variant="dots" />

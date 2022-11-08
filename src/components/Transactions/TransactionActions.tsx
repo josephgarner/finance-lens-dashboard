@@ -1,5 +1,6 @@
 import { Button, createStyles, Group, Loader } from "@mantine/core";
 import { useRunSanitization } from "api/hooks/useRunSanitization";
+import { useFinance } from "context";
 import { QueryKey } from "enums";
 import { useState } from "react";
 import { TbBookUpload, TbRefreshDot } from "react-icons/tb";
@@ -10,6 +11,7 @@ export const TransactionActions = () => {
   const runSanitization = useRunSanitization();
   const { classes } = useStyles();
   const queryClient = useQueryClient();
+  const { selectedAccount } = useFinance();
 
   const [matchLoading, setMatchLoading] = useState(false);
 
@@ -35,14 +37,17 @@ export const TransactionActions = () => {
             )
           }
           radius="lg"
+          disabled={!selectedAccount}
           onClick={async () => {
             setMatchLoading(true);
-            await runSanitization.mutateAsync({ account: "Payment Account" });
+            await runSanitization.mutateAsync({ account: selectedAccount! });
             await queryClient.refetchQueries({
-              queryKey: [QueryKey.ListAllTransactions],
+              queryKey: [`${QueryKey.ListAllTransactions}-${selectedAccount}`],
             });
             await queryClient.refetchQueries({
-              queryKey: [QueryKey.ListUnsanitizedTransactions],
+              queryKey: [
+                `${QueryKey.ListUnsanitizedTransactions}-${selectedAccount}`,
+              ],
             });
             setMatchLoading(false);
           }}

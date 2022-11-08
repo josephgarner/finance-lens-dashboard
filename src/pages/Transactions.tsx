@@ -1,29 +1,63 @@
-import { createStyles, Container, Title, Tabs } from "@mantine/core";
+import {
+  createStyles,
+  Container,
+  Title,
+  Tabs,
+  Alert,
+  Text,
+} from "@mantine/core";
 import {
   SelectableAccountList,
   TransactionList,
   TransactionActions,
 } from "components";
+import { useFinance } from "context";
+import { FaInfoCircle } from "react-icons/fa";
 
 export const Transactions = () => {
   const { classes } = useStyles();
+
+  const { selectedAccount } = useFinance();
+
   return (
     <Container className={classes.container}>
       <Title className={classes.title}>Transactions</Title>
       <SelectableAccountList />
       <TransactionActions />
-      <Tabs variant="outline" radius="lg" defaultValue="Outstanding">
-        <Tabs.List>
-          <Tabs.Tab value="Outstanding">Outstanding</Tabs.Tab>
-          <Tabs.Tab value="History">History</Tabs.Tab>
-        </Tabs.List>
-        <Tabs.Panel value="Outstanding" pt="xs">
-          <TransactionList unSanitized />
-        </Tabs.Panel>
-        <Tabs.Panel value="History" pt="xs">
-          <TransactionList />
-        </Tabs.Panel>
-      </Tabs>
+      {!selectedAccount ? (
+        <Alert
+          icon={<FaInfoCircle size={16} />}
+          color="indigo"
+          radius="lg"
+          className={classes.width100}
+        >
+          <>
+            <Text>
+              An account has either not been created or selected. Please either
+              select from an account above or nagivate the accounts page and
+              create a new account
+            </Text>
+          </>
+        </Alert>
+      ) : (
+        <Tabs
+          variant="outline"
+          radius="lg"
+          defaultValue="Outstanding"
+          classNames={{ tabLabel: classes.tab }}
+        >
+          <Tabs.List>
+            <Tabs.Tab value="Outstanding">Outstanding</Tabs.Tab>
+            <Tabs.Tab value="History">History</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value="Outstanding" pt="md">
+            <TransactionList unSanitized selectedAccount={selectedAccount} />
+          </Tabs.Panel>
+          <Tabs.Panel value="History" pt="md">
+            <TransactionList selectedAccount={selectedAccount} />
+          </Tabs.Panel>
+        </Tabs>
+      )}
     </Container>
   );
 };
@@ -45,7 +79,15 @@ const useStyles = createStyles((theme) => ({
     flexDirection: "column",
     alignItems: "flex-start",
   },
+  width100: {
+    width: "100%",
+  },
   sectionTitle: {
     marginBottom: theme.spacing.md,
+  },
+  tab: {
+    "::before": {
+      background: "none",
+    },
   },
 }));

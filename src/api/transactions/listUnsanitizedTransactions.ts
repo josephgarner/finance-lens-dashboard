@@ -6,12 +6,21 @@ export type ListUnsanitizedTransactionsResponse = {
   transactions: Transaction[];
 };
 
-export const listUnsanitizedTransactions =
-  async (): Promise<ListUnsanitizedTransactionsResponse> => {
-    const response = await get<{}, ListUnsanitizedTransactionsResponse>(
-      Service.Transaction,
-      Endpoint.ListUnsanitizedTransactions,
-      {}
-    );
-    return { transactions: response.result.transactions };
-  };
+export type ListUnsanitizedTransactionsParams = {
+  account: string;
+};
+
+export const listUnsanitizedTransactions = async (
+  params: ListUnsanitizedTransactionsParams
+): Promise<ListUnsanitizedTransactionsResponse> => {
+  const endpoint = Endpoint.ListUnsanitizedTransactionsPerAccount.replace(
+    ":account",
+    params.account || ""
+  );
+  const response = await get<{}, ListUnsanitizedTransactionsResponse>(
+    Service.Transaction,
+    endpoint,
+    {}
+  );
+  return { transactions: response.result.transactions };
+};

@@ -24,6 +24,17 @@ export const SanitizationRow = ({ sanitization }: Props) => {
 
   const [openEdit, setOpenEdit] = useState(false);
 
+  const getKeywords = () => {
+    let words = "";
+    sanitization.keywords.forEach((word, index) => {
+      words += `${word}${
+        index === sanitization.keywords.map.length ? "" : ", "
+      }`;
+    });
+    console.log(words);
+    return words;
+  };
+
   return (
     <>
       <UpdateSanitizationModal
@@ -43,7 +54,7 @@ export const SanitizationRow = ({ sanitization }: Props) => {
             <Text>{sanitization.vendor}</Text>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Text>{sanitization.rawDescription}</Text>
+            <Text>{getKeywords()}</Text>
           </Grid.Col>
           <Grid.Col span={8}>
             <Text className={classes.description}>

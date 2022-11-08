@@ -5,6 +5,7 @@ import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router } from "react-router-dom";
+import { FinanceContextProvider } from "context";
 
 const queryClient = new QueryClient();
 
@@ -12,15 +13,17 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Router>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider
-          theme={{ colorScheme: "light" }}
-          withGlobalStyles
-          withNormalizeCSS
-        >
-          <NotificationsProvider>
-            <AppRoot />
-          </NotificationsProvider>
-        </MantineProvider>
+        <FinanceContextProvider>
+          <MantineProvider
+            theme={{ colorScheme: "light" }}
+            withGlobalStyles
+            withNormalizeCSS
+          >
+            <NotificationsProvider>
+              <AppRoot />
+            </NotificationsProvider>
+          </MantineProvider>
+        </FinanceContextProvider>
       </QueryClientProvider>
     </Router>
   </React.StrictMode>

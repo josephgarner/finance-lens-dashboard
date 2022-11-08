@@ -8,30 +8,43 @@ import {
 } from "@mantine/core";
 import { useListAllTransactions, uselistUnsanitizedTransactions } from "api";
 import { LoadingError, MonthRow, TransactionRow } from "components";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { groupByDate } from "utils/groupByDate";
 import { matchSorter } from "match-sorter";
+import { useFinance } from "context";
 
 type Props = {
+  selectedAccount: string;
   unSanitized?: boolean;
 };
 
-export const TransactionList = ({ unSanitized }: Props) => {
+export const TransactionList = ({ unSanitized, selectedAccount }: Props) => {
   const { classes } = useStyles();
   const [selectedMonth, setSelectedMonth] = useState("All Months");
   const [search, setSearch] = useState("");
-  const { isSuccess, isError, data } = unSanitized
-    ? uselistUnsanitizedTransactions()
-    : useListAllTransactions();
+  const [currentAccount, setCurrentAccount] = useState(selectedAccount);
+  const { isSuccess, isError, data, isFetching } = unSanitized
+    ? uselistUnsanitizedTransactions({ account: selectedAccount })
+    : useListAllTransactions({ account: selectedAccount });
+
+  useEffect(() => {
+    setCurrentAccount(selectedAccount);
+  }, [selectedAccount, setCurrentAccount, data?.transactions]);
 
   const transactions = useMemo(
     () => (isSuccess ? data.transactions : []),
     [isSuccess, data?.transactions]
   );
 
-  if ((!isSuccess && !isError) || isError) {
-    return <LoadingError success={isSuccess} error={isError} />;
+  if (currentAccount !== selectedAccount) {
+    if (isFetching || isError) {
+      return <LoadingError isFetching={isFetching} error={isError} />;
+    }
+  }
+
+  if (!isSuccess || isError) {
+    return <LoadingError isSuccess={isSuccess} error={isError} />;
   }
 
   const groupedTransactions = groupByDate(transactions);
@@ -102,29 +115,37 @@ export const TransactionList = ({ unSanitized }: Props) => {
           onChange={(event) => setSearch(event.currentTarget.value)}
         />
       </Group>
-      {selectedMonth === "All Months"
-        ? uniqueMonths.map((month) => {
-            return (
-              <Group key={month} className={classes.width100}>
-                <MonthRow
-                  month={month}
-                  count={groupedTransactions[month].length}
+      {selectedMonth === "All Months" ? (
+        uniqueMonths.map((month) => {
+          return (
+            <Group key={month} className={classes.width100}>
+              <MonthRow
+                month={month}
+                count={searchTransactions(month).length}
+              />
+              {searchTransactions(month).map((transaction, index) => (
+                <TransactionRow
+                  key={`${index}-${month}`}
+                  transaction={transaction}
                 />
-                {searchTransactions(month).map((transaction, index) => (
-                  <TransactionRow
-                    key={`${index}-${month}`}
-                    transaction={transaction}
-                  />
-                ))}
-              </Group>
-            );
-          })
-        : searchTransactions(selectedMonth).map((transaction, index) => (
+              ))}
+            </Group>
+          );
+        })
+      ) : (
+        <Group className={classes.width100}>
+          <MonthRow
+            month={selectedMonth}
+            count={searchTransactions(selectedMonth).length}
+          />
+          {searchTransactions(selectedMonth).map((transaction, index) => (
             <TransactionRow
               key={`${index}-${selectedMonth}`}
               transaction={transaction}
             />
           ))}
+        </Group>
+      )}
     </Group>
   );
 };

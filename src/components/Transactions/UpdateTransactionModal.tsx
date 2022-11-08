@@ -12,6 +12,7 @@ import {
   Checkbox,
   Alert,
   LoadingOverlay,
+  MultiSelect,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { QueryKey, TransactionType } from "enums";
@@ -21,12 +22,18 @@ import { displayDate } from "utils/displayDate";
 import { FaInfoCircle } from "react-icons/fa";
 import { useAddSanitizing, useUpdateTransaction } from "api";
 import { useQueryClient } from "react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFinance } from "context";
 
 type Props = {
   opened: boolean;
   setOpen: (openState: boolean) => void;
   transaction: Transaction;
+};
+
+type Keyword = {
+  value: string;
+  label: string;
 };
 
 export const UpdateTransactionModal = ({
@@ -36,48 +43,71 @@ export const UpdateTransactionModal = ({
 }: Props) => {
   const { classes } = useStyles();
   const [loading, setLoading] = useState(false);
+  const [keywords, setKeyWords] = useState<Keyword[]>([]);
   const updateTransaction = useUpdateTransaction();
   const addSanitizing = useAddSanitizing();
   const queryClient = useQueryClient();
+  const { selectedAccount } = useFinance();
+
+  const initialFormValues = {
+    sanitizedDescription: transaction.sanitizedDescription || "",
+    type: transaction.type,
+    category: transaction.category || "",
+    vendor: transaction.vendor || "",
+    useSanitize: false,
+    keyword: [""],
+  };
 
   const form = useForm({
     initialValues: {
-      sanitizedDescription: transaction.sanitizedDescription || "",
-      type: transaction.type,
-      category: transaction.category || "",
-      vendor: transaction.vendor || "",
-      useSanitize: false,
-      keyword: transaction.rawDescription,
+      ...initialFormValues,
     },
 
     validate: {
-      sanitizedDescription: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
-      category: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
-      vendor: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
-      keyword: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
+      sanitizedDescription: (value: string) => {
+        if (value == "") {
+          return "Please enter a description";
+        }
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
+        }
+      },
+      category: (value: string) => {
+        if (value == "") {
+          return "Please enter a catergory";
+        }
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
+        }
+      },
+      vendor: (value: string) => {
+        if (value == "") {
+          return "Please enter a vender";
+        }
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
+        }
+      },
+      keyword: (value: string[]) => {
+        if (form.values.useSanitize && value.length === 0) {
+          return "Please enter at least one keyword";
+        }
+      },
     },
   });
+
+  useEffect(() => {
+    form.setValues(initialFormValues);
+  }, [transaction]);
 
   const handleSubmit = async (transaction: Transaction) => {
     setLoading(true);
     await updateTransaction.mutateAsync(transaction);
     await queryClient.refetchQueries({
-      queryKey: [QueryKey.ListAllTransactions],
+      queryKey: [`${QueryKey.ListAllTransactions}-${selectedAccount}`],
     });
     await queryClient.refetchQueries({
-      queryKey: [QueryKey.ListUnsanitizedTransactions],
+      queryKey: [`${QueryKey.ListUnsanitizedTransactions}-${selectedAccount}`],
     });
     setOpen(false);
     form.reset();
@@ -94,6 +124,7 @@ export const UpdateTransactionModal = ({
       onClose={() => {
         setOpen(false), form.reset();
       }}
+      closeOnClickOutside={false}
       title="Edit transaction"
       size="lg"
       radius="lg"
@@ -102,6 +133,7 @@ export const UpdateTransactionModal = ({
         <LoadingOverlay visible={loading} overlayBlur={2} />
         <form
           onSubmit={form.onSubmit((values) => {
+            console.log(values);
             const record = {
               ...transaction,
               sanitizedDescription: values.sanitizedDescription,
@@ -111,7 +143,7 @@ export const UpdateTransactionModal = ({
             };
             if (values.useSanitize) {
               const sanitize = {
-                rawDescription: values.keyword,
+                keywords: values.keyword,
                 sanitizedDescription: values.sanitizedDescription,
                 type: values.type,
                 category: values.category,
@@ -174,7 +206,6 @@ export const UpdateTransactionModal = ({
               placeholder="Holiday Fish and Chips"
               radius="lg"
               withAsterisk
-              required
               {...form.getInputProps("sanitizedDescription")}
             />
             <TextInput
@@ -184,7 +215,6 @@ export const UpdateTransactionModal = ({
               placeholder="Eating out"
               radius="lg"
               withAsterisk
-              required
               {...form.getInputProps("category")}
             />
             <TextInput
@@ -194,7 +224,6 @@ export const UpdateTransactionModal = ({
               placeholder="Blue Bird Cafe"
               radius="lg"
               withAsterisk
-              required
               {...form.getInputProps("vendor")}
             />
             <Checkbox
@@ -220,14 +249,24 @@ export const UpdateTransactionModal = ({
                   </Text>
                   <Text>
                     We suggest taking the unique keyword/s from the description
-                    to ensure the success of the automated matching process
+                    to ensure the success of the automated matching process.
                   </Text>
                 </Alert>
-                <TextInput
+                <Text>{transaction.rawDescription}</Text>
+                <MultiSelect
                   className={classes.input}
                   label="Keyword match"
-                  description="This value will be used to match the default description of the transaction"
-                  placeholder="Purchase"
+                  data={keywords}
+                  description="These values will be used to match the default description of the transaction"
+                  placeholder="purchase"
+                  searchable
+                  creatable
+                  getCreateLabel={(query) => `+ Add ${query} keyword/s`}
+                  onCreate={(query) => {
+                    const item = { value: query, label: query };
+                    setKeyWords((current) => [...current, item]);
+                    return item;
+                  }}
                   radius="lg"
                   {...form.getInputProps("keyword")}
                 />
