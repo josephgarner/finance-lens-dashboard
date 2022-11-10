@@ -1,10 +1,20 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { AppShell } from "@mantine/core";
+import { retreiveAPIToken } from "auth/retreiveAPIToken";
 import { CoreNavbar } from "components";
 import { Paths } from "enums";
 import { Accounts, SanitizeTransactions, Transactions } from "pages";
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 export const AppRoot = () => {
+  const { isAuthenticated } = useAuth0();
+  const { fetchToken } = retreiveAPIToken();
+
+  useEffect(() => {
+    fetchToken();
+  }, [isAuthenticated]);
+
   return (
     <AppShell
       padding="md"

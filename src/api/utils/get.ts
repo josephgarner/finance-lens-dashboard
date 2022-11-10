@@ -1,14 +1,15 @@
-import ky from "ky";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Endpoint, Service } from "enums";
+import { ky } from "./ky";
 
-export async function get<
+export const get = async <
   Params extends Record<string, string | number | boolean>,
   Response
 >(
   service: Service,
   endpoint: Endpoint | string,
   params: Params
-): Promise<{ result: Response }> {
+): Promise<{ result: Response }> => {
   const getOptions = {
     searchParams: params,
     retry: {
@@ -25,4 +26,4 @@ export async function get<
   };
 
   return response;
-}
+};

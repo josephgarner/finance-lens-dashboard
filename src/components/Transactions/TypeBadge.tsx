@@ -8,22 +8,10 @@ type Props = {
 export const TypeBadge = ({ type }: Props) => {
   switch (type) {
     case TransactionType.EXPENSE:
-      return (
-        <Badge color="red" size="lg">
-          {type}
-        </Badge>
-      );
+      return <Badge color="red">{type}</Badge>;
     case TransactionType.INCOME:
-      return (
-        <Badge color="green" size="lg">
-          {type}
-        </Badge>
-      );
+      return <Badge color="green">{type}</Badge>;
     case TransactionType.TRANSFER:
-      return (
-        <Badge color="yellow" size="lg">
-          {type}
-        </Badge>
-      );
+      return <Badge color="yellow">{type}</Badge>;
   }
 };

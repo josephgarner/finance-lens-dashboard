@@ -44,24 +44,24 @@ export const SanitizationRow = ({ sanitization }: Props) => {
       />
       <Paper className={classes.paper}>
         <Grid columns={24}>
-          <Grid.Col span={3}>
+          <Grid.Col className={classes.col} span={3}>
             <TypeBadge type={sanitization.type} />
           </Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col className={classes.col} span={3}>
             <Text>{sanitization.category}</Text>
           </Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col className={classes.col} span={3}>
             <Text>{sanitization.vendor}</Text>
           </Grid.Col>
-          <Grid.Col span={6}>
+          <Grid.Col className={classes.col} span={6}>
             <Text>{getKeywords()}</Text>
           </Grid.Col>
-          <Grid.Col span={8}>
+          <Grid.Col className={classes.col} span={8}>
             <Text className={classes.description}>
               {sanitization.sanitizedDescription}
             </Text>
           </Grid.Col>
-          <Grid.Col span={1}>
+          <Grid.Col className={classes.col} span={1}>
             <ActionIcon
               color="blue"
               size="sm"
@@ -78,8 +78,6 @@ export const SanitizationRow = ({ sanitization }: Props) => {
 
 const useStyles = createStyles((theme) => ({
   paper: {
-    padding: theme.spacing.md,
-    borderRadius: theme.radius.lg,
     width: "100%",
   },
   group: {
@@ -89,5 +87,9 @@ const useStyles = createStyles((theme) => ({
   },
   description: {
     flexGrow: 2,
+  },
+  col: {
+    padding: 0,
+    margin: theme.spacing.xs,
   },
 }));

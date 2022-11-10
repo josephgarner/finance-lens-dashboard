@@ -70,8 +70,6 @@ export const TransactionRow = ({ transaction }: Props) => {
 
 const useStyles = createStyles((theme) => ({
   paper: {
-    padding: theme.spacing.md,
-    borderRadius: theme.radius.lg,
     width: "100%",
   },
   group: {

@@ -48,4 +48,5 @@ export enum Paths {
   Transactions = "/",
   SanitizeTransactions = "/sanitize-transactions",
   Accounts = "/accounts",
+  Login = "/login",
 }

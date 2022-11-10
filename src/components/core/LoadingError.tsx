@@ -22,8 +22,7 @@ export const LoadingError = ({ error, isFetching, isSuccess }: Props) => {
       <Alert
         icon={<FaInfoCircle size={16} />}
         title="Failure"
-        color="red"
-        variant="filled"
+        variant="outline"
       >
         An error has occured! seems something has gone wrong in our backend.
       </Alert>

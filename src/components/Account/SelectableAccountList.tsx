@@ -40,12 +40,18 @@ export const SelectableAccountList = () => {
                 ? classes.selected
                 : classes.unSelected
             )}
-            radius="lg"
-            p="xl"
           >
-            <Title order={4}>{account.accountName}</Title>
-            <Title>{displayCurrency(account.balance!)}</Title>
-            <Title order={5}>{account.accountType}</Title>
+            <Group spacing={"sm"}>
+              <Title className={cx(classes.title)} order={4}>
+                {account.accountName}
+              </Title>
+              <Title className={cx(classes.title, classes.textRight)}>
+                {displayCurrency(account.balance!)}
+              </Title>
+              <Title className={cx(classes.title)} order={5}>
+                {account.accountType}
+              </Title>
+            </Group>
           </Paper>
         </UnstyledButton>
       ))}
@@ -55,19 +61,22 @@ export const SelectableAccountList = () => {
 
 const useStyles = createStyles((theme) => ({
   group: {
-    width: "100vw",
+    width: "100%",
+  },
+  title: {
+    width: "100%",
+    textAlign: "left",
+  },
+  textRight: {
+    textAlign: "right",
   },
   option: {
     marginBottom: theme.spacing.md,
-    width: 220,
+    width: 250,
   },
   selected: {
-    backgroundColor: theme.colors.green[6],
+    backgroundColor: theme.colors.primary[0],
     color: theme.white,
   },
-  unSelected: {
-    // marginBottom: theme.spacing.md,
-    // backgroundColor: theme.colors.gray[1],
-    // color: theme.colors.gray[5],
-  },
+  unSelected: {},
 }));

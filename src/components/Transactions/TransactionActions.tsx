@@ -21,11 +21,7 @@ export const TransactionActions = () => {
     <>
       <UploadFileModal opened={openUpload} setOpen={setOpenUpload} />
       <Group className={classes.group}>
-        <Button
-          leftIcon={<TbBookUpload />}
-          radius="lg"
-          onClick={() => setOpenUpload(true)}
-        >
+        <Button leftIcon={<TbBookUpload />} onClick={() => setOpenUpload(true)}>
           Upload Transaction Record
         </Button>
         <Button
@@ -36,7 +32,6 @@ export const TransactionActions = () => {
               <TbRefreshDot />
             )
           }
-          radius="lg"
           disabled={!selectedAccount}
           onClick={async () => {
             setMatchLoading(true);
@@ -61,7 +56,7 @@ export const TransactionActions = () => {
 
 const useStyles = createStyles((theme) => ({
   group: {
-    width: "100vw",
+    width: "100%",
     marginBottom: theme.spacing.md,
     marginTop: theme.spacing.md,
   },

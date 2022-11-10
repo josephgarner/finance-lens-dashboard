@@ -6,6 +6,7 @@ import {
   Alert,
   Text,
 } from "@mantine/core";
+import { retreiveAPIToken } from "auth/retreiveAPIToken";
 import {
   SelectableAccountList,
   TransactionList,
@@ -25,12 +26,7 @@ export const Transactions = () => {
       <SelectableAccountList />
       <TransactionActions />
       {!selectedAccount ? (
-        <Alert
-          icon={<FaInfoCircle size={16} />}
-          color="indigo"
-          radius="lg"
-          className={classes.width100}
-        >
+        <Alert icon={<FaInfoCircle size={16} />}>
           <>
             <Text>
               An account has either not been created or selected. Please either
@@ -78,9 +74,6 @@ const useStyles = createStyles((theme) => ({
     marginBottom: theme.spacing.xl,
     flexDirection: "column",
     alignItems: "flex-start",
-  },
-  width100: {
-    width: "100%",
   },
   sectionTitle: {
     marginBottom: theme.spacing.md,

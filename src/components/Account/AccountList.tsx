@@ -12,7 +12,7 @@ export const AccountList = () => {
   const { isSuccess, isError, data } = useListAllAccounts();
 
   if ((!isSuccess && !isError) || isError) {
-    return <LoadingError success={isSuccess} error={isError} />;
+    return <LoadingError isSuccess={isSuccess} error={isError} />;
   }
 
   return (
