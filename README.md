@@ -23,8 +23,13 @@ After cloaning this repo navigate to the folder and proceed with the following
 
 ```
 NODE_ENV=
-VITE_WEBSOCKET_ADDRESS=
-VITE_WEBSOCKET_PORT=
+VITE_FINANCE_LENS_SERVICE_ADDRESS=
+VITE_FINANCE_LENS_SERVICE_PORT=
+
+VITE_AUTH0_DOMAIN=
+VITE_AUTH0_CLIENT_ID=
+VITE_AUTH0_AUDIENCE=
+VITE_AUTH0_SCOPE=
 ```
 
 #### Install dependacies
