@@ -1,10 +1,10 @@
-export * from "./transactions/TransactionRow";
-export * from "./transactions/TypeBadge";
-export * from "./transactions/TransactionList";
-export * from "./transactions/MonthRow";
-export * from "./transactions/TransactionActions";
-export * from "./transactions/UploadFileModal";
-export * from "./transactions/SanitizationList";
+export * from "./transaction/TransactionRow";
+export * from "./transaction/TypeBadge";
+export * from "./transaction/TransactionList";
+export * from "./transaction/MonthRow";
+export * from "./transaction/TransactionActions";
+export * from "./transaction/UploadFileModal";
+export * from "./transaction/SanitizationList";
 
 export * from "./account/SelectableAccountList";
 export * from "./account/AccountRow";
