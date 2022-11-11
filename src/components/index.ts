@@ -6,10 +6,10 @@ export * from "./transaction/TransactionActions";
 export * from "./transaction/UploadFileModal";
 export * from "./transaction/SanitizationList";
 
-export * from "./account/SelectableAccountList";
-export * from "./account/AccountRow";
-export * from "./account/CreateAccountModal";
-export * from "./account/AccountList";
+export * from "./accounts/SelectableAccountList";
+export * from "./accounts/AccountRow";
+export * from "./accounts/CreateAccountModal";
+export * from "./accounts/AccountList";
 
 export * from "./core/CoreNavbar";
 export * from "./core/Link";
