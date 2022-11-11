@@ -26,7 +26,7 @@ export async function post<Body extends JSONSerializable | FormData, Response>(
   const baseURL = import.meta.env.VITE_FINANCE_LENS_SERVICE_ADDRESS;
   const port = import.meta.env.VITE_FINANCE_LENS_SERVICE_PORT;
 
-  const url = `${baseURL}:${port}/${service}/${endpoint}`;
+  const url = `${baseURL}:${port}/api/${service}/${endpoint}`;
   const response = (await ky.post(url, postOptions).json()) as {
     result: Response;
   };

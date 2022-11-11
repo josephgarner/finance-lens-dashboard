@@ -20,7 +20,7 @@ export const get = async <
   const baseURL = import.meta.env.VITE_FINANCE_LENS_SERVICE_ADDRESS;
   const port = import.meta.env.VITE_FINANCE_LENS_SERVICE_PORT;
 
-  const url = `${baseURL}:${port}/${service}/${endpoint}`;
+  const url = `${baseURL}:${port}/api/${service}/${endpoint}`;
   const response = (await ky.get(url, getOptions).json()) as {
     result: Response;
   };
