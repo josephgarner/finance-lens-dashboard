@@ -34,7 +34,7 @@ import {
   TbInfoCircle,
 } from "react-icons/tb";
 import { useMemo, useState } from "react";
-import { listAllAccountNames } from "utils/ListAllAccountNames";
+import { listAllAccountNames } from "utils/listAllAccountNames";
 import { useUploadTransactionRecord } from "api/hooks/useUploadTransactionRecord";
 import { delay } from "underscore";
 
