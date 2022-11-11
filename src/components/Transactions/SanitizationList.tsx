@@ -24,13 +24,13 @@ export const SanitizationList = () => {
   );
 
   if ((!isSuccess && !isError) || isError) {
-    return <LoadingError success={isSuccess} error={isError} />;
+    return <LoadingError isSuccess={isSuccess} error={isError} />;
   }
 
   const searchsanitizations = () => {
     if (sanitizations.length > 0)
       return matchSorter(sanitizations, search, {
-        keys: ["rawDescription", "sanitizedDescription"],
+        keys: ["keywords", "sanitizedDescription"],
       });
     return [];
   };
@@ -38,27 +38,10 @@ export const SanitizationList = () => {
     <Group className={classes.container} position="center">
       <TextInput
         radius="lg"
-        placeholder="Search"
+        placeholder="Search descriptions and keyword/s"
         className={classes.searchInput}
         onChange={(event) => setSearch(event.currentTarget.value)}
       />
-      <Grid className={classes.width100} columns={24}>
-        <Grid.Col span={3}>
-          <Text weight={500}>Type</Text>
-        </Grid.Col>
-        <Grid.Col span={3}>
-          <Text weight={500}>Category</Text>
-        </Grid.Col>
-        <Grid.Col span={3}>
-          <Text weight={500}>Vendor</Text>
-        </Grid.Col>
-        <Grid.Col span={6}>
-          <Text weight={500}>Keyword/s</Text>
-        </Grid.Col>
-        <Grid.Col span={7}>
-          <Text weight={500}>Description</Text>
-        </Grid.Col>
-      </Grid>
       {searchsanitizations().map((sanitization, index) => (
         <SanitizationRow key={index} sanitization={sanitization} />
       ))}

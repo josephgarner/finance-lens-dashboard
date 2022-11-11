@@ -11,12 +11,12 @@ import {
 import { Link } from "components";
 import { Paths } from "enums";
 import {
-  TbZoomMoney,
   TbArrowsLeftRight,
   TbWallet,
   TbClipboardList,
   TbUser,
 } from "react-icons/tb";
+import { RiCoinLine } from "react-icons/ri";
 
 export const CoreNavbar = () => {
   const { classes } = useStyles();
@@ -34,8 +34,8 @@ export const CoreNavbar = () => {
     <Navbar width={{ base: 250 }} p="md">
       <Navbar.Section className={classes.header}>
         <Group className={classes.titleGroup}>
-          <TbZoomMoney size={24} />
-          <Title order={3}>Finance Lens</Title>
+          <RiCoinLine size={24} />
+          <Title order={2}>Lakshmi</Title>
         </Group>
         <Divider />
       </Navbar.Section>

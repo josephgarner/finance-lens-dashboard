@@ -1,15 +1,18 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { AppShell } from "@mantine/core";
+import { RequiresAuth } from "auth";
 import { retreiveAPIToken } from "auth/retreiveAPIToken";
 import { CoreNavbar } from "components";
 import { Paths } from "enums";
-import { Accounts, SanitizeTransactions, Transactions } from "pages";
+import { Accounts, Home, SanitizeTransactions, Transactions } from "pages";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useIsHomePage } from "utils/useIsHomePage";
 
 export const AppRoot = () => {
   const { isAuthenticated } = useAuth0();
   const { fetchToken } = retreiveAPIToken();
+  const isHome = useIsHomePage();
 
   useEffect(() => {
     fetchToken();
@@ -18,7 +21,7 @@ export const AppRoot = () => {
   return (
     <AppShell
       padding="md"
-      navbar={<CoreNavbar />}
+      navbar={isHome && !isAuthenticated ? <></> : <CoreNavbar />}
       styles={(theme) => ({
         main: {
           backgroundColor:
@@ -29,12 +32,29 @@ export const AppRoot = () => {
       })}
     >
       <Routes>
-        <Route path={Paths.Transactions} element={<Transactions />} />
+        <Route
+          path={Paths.Home}
+          element={
+            isAuthenticated ? (
+              <RequiresAuth component={Transactions} />
+            ) : (
+              <Home />
+            )
+          }
+        />
+
+        <Route
+          path={Paths.Transactions}
+          element={<RequiresAuth component={Transactions} />}
+        />
         <Route
           path={Paths.SanitizeTransactions}
-          element={<SanitizeTransactions />}
+          element={<RequiresAuth component={SanitizeTransactions} />}
         />
-        <Route path={Paths.Accounts} element={<Accounts />} />
+        <Route
+          path={Paths.Accounts}
+          element={<RequiresAuth component={Accounts} />}
+        />
       </Routes>
     </AppShell>
   );

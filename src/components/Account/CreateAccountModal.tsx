@@ -117,16 +117,27 @@ export const CreateAccountModal = ({
                   position="left"
                   {...form.getInputProps("accountType")}
                 >
-                  <Chip value={AccountType.SPENDING} variant="filled" size="md">
+                  <Chip
+                    value={AccountType.SPENDING}
+                    variant="filled"
+                    color={"gray"}
+                    size="md"
+                  >
                     {AccountType.SPENDING}
                   </Chip>
-                  <Chip value={AccountType.SAVINGS} variant="filled" size="md">
+                  <Chip
+                    value={AccountType.SAVINGS}
+                    variant="filled"
+                    color={"gray"}
+                    size="md"
+                  >
                     {AccountType.SAVINGS}
                   </Chip>
                   <Chip
                     value={AccountType.TERMDEPOSIT}
                     variant="filled"
                     size="md"
+                    color={"gray"}
                   >
                     {AccountType.TERMDEPOSIT}
                   </Chip>

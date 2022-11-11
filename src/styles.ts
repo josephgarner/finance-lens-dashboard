@@ -1,4 +1,5 @@
 import {
+  ActionIconStylesParams,
   AlertStylesParams,
   BadgeStylesParams,
   ButtonStylesParams,
@@ -41,19 +42,55 @@ export const ComponentStyles = {
       },
     }),
   },
+  ActionIcon: {
+    styles: (theme: MantineTheme, params: ActionIconStylesParams) => ({
+      root: {
+        color:
+          params.variant === "transparent"
+            ? theme.colors.secondary[0]
+            : theme.colors.primary[0],
+      },
+    }),
+  },
   Badge: {
     styles: (theme: MantineTheme, params: BadgeStylesParams) => ({
       root: {
-        fontSize: theme.fontSizes["md"],
+        fontSize: theme.fontSizes["sm"],
         fontWeight: BUTTON_FONT_WEIGHT_BY_SIZE["lg"],
         color:
           params.color === "red"
             ? theme.colors.red[2]
             : params.color === "yellow"
             ? theme.colors.yellow[2]
+            : params.color === "gray"
+            ? theme.colors.gray[7]
             : theme.colors.green[2],
         padding: theme.spacing.sm,
         paddingRight: theme.spacing.sm,
+      },
+    }),
+  },
+  Chip: {
+    styles: (theme: MantineTheme, params: ChipStylesParams) => ({
+      paper: {
+        color:
+          params.color === "red"
+            ? theme.colors.red[2]
+            : params.color === "yellow"
+            ? theme.colors.yellow[2]
+            : params.color === "gray"
+            ? theme.colors.gray[7]
+            : theme.colors.green[2],
+      },
+      iconWrapper: {
+        color:
+          params.color === "red"
+            ? theme.colors.red[2]
+            : params.color === "yellow"
+            ? theme.colors.yellow[2]
+            : params.color === "gray"
+            ? theme.colors.gray[7]
+            : theme.colors.green[2],
       },
     }),
   },

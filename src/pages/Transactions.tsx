@@ -6,7 +6,6 @@ import {
   Alert,
   Text,
 } from "@mantine/core";
-import { retreiveAPIToken } from "auth/retreiveAPIToken";
 import {
   SelectableAccountList,
   TransactionList,

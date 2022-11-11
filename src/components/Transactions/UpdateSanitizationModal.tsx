@@ -8,18 +8,24 @@ import {
   Text,
   Button,
   LoadingOverlay,
+  MultiSelect,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { QueryKey, TransactionType } from "enums";
 import { Sanitization } from "types";
 import { useDeleteSanitizing, useUpdateSanitization } from "api";
 import { useQueryClient } from "react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   opened: boolean;
   setOpen: (openState: boolean) => void;
   sanitization: Sanitization;
+};
+
+type Keyword = {
+  value: string;
+  label: string;
 };
 
 export const UpdateSanitizationModal = ({
@@ -32,31 +38,60 @@ export const UpdateSanitizationModal = ({
   const updateSanitization = useUpdateSanitization();
   const deleteSanitization = useDeleteSanitizing();
   const queryClient = useQueryClient();
+  const [keywords, setKeyWords] = useState<Keyword[]>([]);
+
+  const initialFormValues = {
+    keyword: sanitization.keywords || [""],
+    sanitizedDescription: sanitization.sanitizedDescription || "",
+    type: sanitization.type,
+    category: sanitization.category || "",
+    vendor: sanitization.vendor || "",
+  };
 
   const form = useForm({
-    initialValues: {
-      keyword: sanitization.keywords || [""],
-      sanitizedDescription: sanitization.sanitizedDescription || "",
-      type: sanitization.type,
-      category: sanitization.category || "",
-      vendor: sanitization.vendor || "",
-    },
+    initialValues: initialFormValues,
 
     validate: {
-      sanitizedDescription: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
-      category: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
-      vendor: (value: string) =>
-        /^[a-zA-Z0-9-\s]*$/.test(value)
-          ? null
-          : "This field can only contain letters, - and numbers",
+      sanitizedDescription: (value: string) => {
+        if (value == "") {
+          return "Please enter a description";
+        }
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
+        }
+      },
+      category: (value: string) => {
+        if (value == "") {
+          return "Please enter a catergory";
+        }
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
+        }
+      },
+      vendor: (value: string) => {
+        if (value == "") {
+          return "Please enter a vender";
+        }
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
+        }
+      },
+      keyword: (value: string[]) => {
+        if (value.length === 0) {
+          return "Please enter at least one keyword";
+        }
+      },
     },
   });
+
+  useEffect(() => {
+    form.setValues(initialFormValues);
+    setKeyWords(
+      sanitization.keywords.map((word) => {
+        return { value: word, label: word };
+      })
+    );
+  }, [sanitization]);
 
   const handleSubmit = async (sanitization: Sanitization) => {
     setLoading(true);
@@ -85,7 +120,7 @@ export const UpdateSanitizationModal = ({
     <Modal
       opened={opened}
       onClose={() => {
-        setOpen(false), form.reset();
+        setOpen(false), form.reset(), setLoading(false);
       }}
       closeOnClickOutside={false}
       title="Edit matching transaction"
@@ -102,6 +137,7 @@ export const UpdateSanitizationModal = ({
               type: values.type,
               category: values.category,
               vendor: values.vendor,
+              keywords: values.keyword,
             };
             handleSubmit(record);
           })}
@@ -160,13 +196,21 @@ export const UpdateSanitizationModal = ({
               required
               {...form.getInputProps("vendor")}
             />
-            <Textarea
+            <MultiSelect
               className={classes.input}
-              label="Keyword/s"
-              placeholder="Purchase"
+              label="Keyword match"
+              data={keywords}
+              description="These values will be used to match the default description of the transaction"
+              placeholder="purchase"
+              searchable
+              creatable
+              getCreateLabel={(query) => `+ Add ${query} keyword/s`}
+              onCreate={(query) => {
+                const item = { value: query, label: query };
+                setKeyWords((current) => [...current, item]);
+                return item;
+              }}
               radius="lg"
-              withAsterisk
-              required
               {...form.getInputProps("keyword")}
             />
             <Textarea
@@ -179,7 +223,11 @@ export const UpdateSanitizationModal = ({
               {...form.getInputProps("sanitizedDescription")}
             />
             <Group>
-              <Button radius="lg" color="red" onClick={() => handleDelete()}>
+              <Button
+                radius="lg"
+                variant="light"
+                onClick={() => handleDelete()}
+              >
                 Delete
               </Button>
               <Button radius="lg" type={"submit"}>

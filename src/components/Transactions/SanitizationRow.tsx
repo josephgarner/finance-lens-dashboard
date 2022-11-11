@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Badge,
   createStyles,
   Grid,
   Group,
@@ -20,19 +21,16 @@ type Props = {
 };
 
 export const SanitizationRow = ({ sanitization }: Props) => {
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
 
   const [openEdit, setOpenEdit] = useState(false);
 
   const getKeywords = () => {
-    let words = "";
-    sanitization.keywords.forEach((word, index) => {
-      words += `${word}${
-        index === sanitization.keywords.map.length ? "" : ", "
-      }`;
-    });
-    console.log(words);
-    return words;
+    return sanitization.keywords.map((word, index) => (
+      <Badge className={classes.tagBagde} key={index} color={"gray"}>
+        {word}
+      </Badge>
+    ));
   };
 
   return (
@@ -43,30 +41,32 @@ export const SanitizationRow = ({ sanitization }: Props) => {
         setOpen={setOpenEdit}
       />
       <Paper className={classes.paper}>
-        <Grid columns={24}>
-          <Grid.Col className={classes.col} span={3}>
+        <Grid className={classes.grid} columns={24}>
+          <Grid.Col className={classes.col} span={4}>
+            <Text className={classes.title}>Type</Text>
             <TypeBadge type={sanitization.type} />
           </Grid.Col>
-          <Grid.Col className={classes.col} span={3}>
+          <Grid.Col className={classes.col} span={4}>
+            <Text className={classes.title}>Category</Text>
             <Text>{sanitization.category}</Text>
           </Grid.Col>
-          <Grid.Col className={classes.col} span={3}>
+          <Grid.Col className={classes.col} span={4}>
+            <Text className={classes.title}>Vendor</Text>
             <Text>{sanitization.vendor}</Text>
           </Grid.Col>
-          <Grid.Col className={classes.col} span={6}>
-            <Text>{getKeywords()}</Text>
-          </Grid.Col>
-          <Grid.Col className={classes.col} span={8}>
+          <Grid.Col className={classes.col} span={10}>
+            <Text className={classes.title}>Description</Text>
             <Text className={classes.description}>
               {sanitization.sanitizedDescription}
             </Text>
           </Grid.Col>
-          <Grid.Col className={classes.col} span={1}>
-            <ActionIcon
-              color="blue"
-              size="sm"
-              onClick={() => setOpenEdit(true)}
-            >
+
+          <Grid.Col className={classes.col} span={22}>
+            <Text className={classes.title}>Keyword Tag/s</Text>
+            {getKeywords()}
+          </Grid.Col>
+          <Grid.Col className={cx(classes.col, classes.actionCol)} span={1}>
+            <ActionIcon size="sm" onClick={() => setOpenEdit(true)}>
               <FaEdit size={18} />
             </ActionIcon>
           </Grid.Col>
@@ -80,10 +80,8 @@ const useStyles = createStyles((theme) => ({
   paper: {
     width: "100%",
   },
-  group: {
-    width: "100%",
-    flexDirection: "row",
-    flexWrap: "nowrap",
+  grid: {
+    padding: theme.spacing.xs,
   },
   description: {
     flexGrow: 2,
@@ -91,5 +89,18 @@ const useStyles = createStyles((theme) => ({
   col: {
     padding: 0,
     margin: theme.spacing.xs,
+  },
+  title: {
+    fontWeight: 600,
+    color: theme.colors.gray[6],
+  },
+  tagBagde: {
+    textTransform: "none",
+    marginRight: theme.spacing.sm,
+  },
+  actionCol: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));

@@ -45,7 +45,8 @@ export enum Bank {
 }
 
 export enum Paths {
-  Transactions = "/",
+  Home = "/",
+  Transactions = "/transactions",
   SanitizeTransactions = "/sanitize-transactions",
   Accounts = "/accounts",
   Login = "/login",

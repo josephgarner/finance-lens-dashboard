@@ -1,5 +1,5 @@
-import ky from "ky";
 import { Endpoint, Service } from "enums";
+import { ky } from "./ky";
 
 type JSONSerializable =
   | string

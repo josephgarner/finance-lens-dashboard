@@ -9,7 +9,6 @@ export type UploadTransactionRecordResponse = {};
 export const uploadTransactionRecord = async (
   body: UploadTransactionRecordBody
 ): Promise<UploadTransactionRecordResponse> => {
-  console.log(body);
   return await post<
     UploadTransactionRecordBody,
     UploadTransactionRecordResponse

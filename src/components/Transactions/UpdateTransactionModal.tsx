@@ -122,7 +122,7 @@ export const UpdateTransactionModal = ({
     <Modal
       opened={opened}
       onClose={() => {
-        setOpen(false), form.reset();
+        setOpen(false), form.reset(), setLoading(false);
       }}
       closeOnClickOutside={false}
       title="Edit transaction"
@@ -133,7 +133,6 @@ export const UpdateTransactionModal = ({
         <LoadingOverlay visible={loading} overlayBlur={2} />
         <form
           onSubmit={form.onSubmit((values) => {
-            console.log(values);
             const record = {
               ...transaction,
               sanitizedDescription: values.sanitizedDescription,

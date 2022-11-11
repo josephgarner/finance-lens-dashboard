@@ -9,7 +9,6 @@ export const retreiveAPIToken = () => {
     const fetch = async () => {
       if (isAuthenticated) {
         const token = await getAccessTokenSilently();
-        console.log(token);
         localStorage.setItem("auth-token", token);
         setToken(token);
       } else {
@@ -18,6 +17,11 @@ export const retreiveAPIToken = () => {
       }
     };
     fetch();
+  };
+
+  const clearToken = () => {
+    localStorage.removeItem("auth-token");
+    setToken(null);
   };
 
   return { token, fetchToken };
