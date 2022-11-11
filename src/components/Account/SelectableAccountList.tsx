@@ -7,7 +7,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useListAllAccounts } from "api";
-import { LoadingError } from "components/core";
+import { LoadingError } from "components";
 import { useFinance } from "context";
 import { useEffect, useMemo } from "react";
 import { displayCurrency } from "utils/displayCurrency";

@@ -8,8 +8,6 @@ services:
     container_name: LakshmiDashboard
     hostname: has.prod.lakshmi-dashboard
     restart: on-failure
-    ports:
-      - "3000:3000"
 networks:
   default:
     name: "nginx_default"

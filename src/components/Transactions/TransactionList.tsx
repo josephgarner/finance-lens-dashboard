@@ -12,7 +12,6 @@ import { useEffect, useMemo, useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { groupByDate } from "utils/groupByDate";
 import { matchSorter } from "match-sorter";
-import { useFinance } from "context";
 
 type Props = {
   selectedAccount: string;

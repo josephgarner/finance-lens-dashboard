@@ -1,6 +1,6 @@
 import { ActionIcon, createStyles, Group, Paper } from "@mantine/core";
 import { useListAllAccounts } from "api";
-import { LoadingError } from "components/core";
+import { LoadingError } from "components";
 import { useState } from "react";
 import { TbPlus } from "react-icons/tb";
 import { AccountRow } from "./AccountRow";

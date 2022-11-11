@@ -1,5 +1,5 @@
 import { createStyles, Container, Title } from "@mantine/core";
-import { AccountList } from "components/account/AccountList";
+import { AccountList } from "components";
 
 export const Accounts = () => {
   const { classes } = useStyles();
