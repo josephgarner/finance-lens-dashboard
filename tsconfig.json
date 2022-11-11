@@ -23,8 +23,9 @@
   "paths": {
     "@utils": ["utils/*"],
     "@api": ["api/*"],
-    "@ui": ["ui/*"],
     "@context": ["context/*"],
     "@pages": ["pages/*"],
+    "@auth": ["auth/*"],
+    "@components": ["components/*"],
   }
 }
