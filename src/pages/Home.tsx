@@ -12,7 +12,7 @@ export const Home = () => {
 
   return (
     <Container className={classes.container}>
-      <Title className={classes.bigTitle}>{"{Aplha}"}</Title>
+      <Title className={classes.bigTitle}>{"{Alpha}"}</Title>
       <Title>Lakshmi</Title>
       <Button
         size="xl"

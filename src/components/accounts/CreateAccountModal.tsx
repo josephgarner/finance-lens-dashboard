@@ -150,7 +150,7 @@ export const CreateAccountModal = ({
 
             <Group>
               <Button radius="lg" type={"submit"}>
-                Update Matching Transaction
+                Create Account
               </Button>
             </Group>
           </Group>
