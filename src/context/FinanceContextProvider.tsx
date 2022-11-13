@@ -5,6 +5,8 @@ interface FinanceContextInterface {
   setDisplayMode: () => void;
   selectedAccount: string | null;
   setSelectedAccount: (accountName: string) => void;
+  privacyMode: boolean;
+  togglePrivacyMode: () => void;
 }
 
 const defaultValue = {
@@ -12,6 +14,8 @@ const defaultValue = {
   setDisplayMode: () => {},
   selectedAccount: null,
   setSelectedAccount: (accountName: string) => {},
+  privacyMode: false,
+  togglePrivacyMode: () => {},
 };
 
 const FinanceContext = createContext<FinanceContextInterface>(defaultValue);
@@ -40,10 +44,20 @@ export const FinanceContextProvider = ({ children }: Props) => {
     });
   };
 
+  const togglePrivacyMode = () => {
+    setData((prev) => {
+      return {
+        ...prev,
+        privacyMode: !prev.privacyMode,
+      };
+    });
+  };
+
   const [data, setData] = useState<FinanceContextInterface>({
     ...defaultValue,
     setDisplayMode,
     setSelectedAccount,
+    togglePrivacyMode,
   });
 
   return (

@@ -1,29 +1,18 @@
 import {
-  Chip,
   createStyles,
   Group,
   Modal,
-  Textarea,
-  TextInput,
   Text,
   Title,
   Button,
-  Collapse,
-  Checkbox,
   Alert,
   NativeSelect,
   useMantineTheme,
-  Loader,
   LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Bank, QueryKey, TransactionType } from "enums";
-import { Sanitization, Transaction } from "types";
-import {
-  useAddSanitizing,
-  useListAllAccounts,
-  useUpdateTransaction,
-} from "api";
+import { useListAllAccounts } from "api";
 import { useQueryClient } from "react-query";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import {
@@ -68,23 +57,22 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
     },
   });
 
-  const handleSubmit = async (bank: string, account: string) => {
+  const handleSubmit = (bank: string, account: string) => {
     setLoading(true);
     const formData = new FormData();
     formData.append("transactionRecord", file!, file!.name);
     formData.append("bank", bank);
     formData.append("account", account);
 
-    await upload.mutateAsync(formData);
-    await delay(() => {}, 1000);
-    await queryClient.refetchQueries({
+    // upload.mutateAsync(formData);
+    delay(() => {}, 1000);
+    queryClient.refetchQueries({
       queryKey: [QueryKey.ListAllTransactions],
     });
-    await queryClient.refetchQueries({
+    queryClient.refetchQueries({
       queryKey: [QueryKey.ListUnsanitizedTransactions],
     });
     setOpen(false);
-    await delay(() => {}, 1000);
     form.reset();
     setFile(null);
     setLoading(false);

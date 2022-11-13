@@ -1,11 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
+  ActionIcon,
   Button,
   createStyles,
   Divider,
   Group,
   Navbar,
-  ThemeIcon,
   Title,
 } from "@mantine/core";
 import { Link } from "components";
@@ -15,15 +15,18 @@ import {
   TbWallet,
   TbClipboardList,
   TbUser,
+  TbEye,
+  TbEyeOff,
 } from "react-icons/tb";
 import { RiCoinLine } from "react-icons/ri";
+import { useFinance } from "context";
 
 export const CoreNavbar = () => {
   const { classes } = useStyles();
 
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { togglePrivacyMode, privacyMode } = useFinance();
 
-  console.log(user);
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const logoutWithRedirect = () =>
     logout({
@@ -73,26 +76,36 @@ export const CoreNavbar = () => {
         </Group>
       </Navbar.Section>
       <Navbar.Section>
-        {isAuthenticated && (
-          <Button
-            fullWidth
-            leftIcon={<TbUser size={14} />}
-            variant="light"
-            onClick={() => logoutWithRedirect()}
+        <Group position="center">
+          <ActionIcon
+            // className={classes.action}
+            size="xl"
+            radius="lg"
+            onClick={() => togglePrivacyMode()}
           >
-            Log Out
-          </Button>
-        )}
-        {!isAuthenticated && (
-          <Button
-            fullWidth
-            leftIcon={<TbUser size={14} />}
-            variant="light"
-            onClick={() => loginWithRedirect({})}
-          >
-            Login
-          </Button>
-        )}
+            {privacyMode ? <TbEyeOff size={28} /> : <TbEye size={28} />}
+          </ActionIcon>
+          {isAuthenticated && (
+            <Button
+              fullWidth
+              leftIcon={<TbUser size={14} />}
+              variant="light"
+              onClick={() => logoutWithRedirect()}
+            >
+              Log Out
+            </Button>
+          )}
+          {!isAuthenticated && (
+            <Button
+              fullWidth
+              leftIcon={<TbUser size={14} />}
+              variant="light"
+              onClick={() => loginWithRedirect({})}
+            >
+              Login
+            </Button>
+          )}
+        </Group>
       </Navbar.Section>
     </Navbar>
   );

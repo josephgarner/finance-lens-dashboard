@@ -11,7 +11,7 @@ export const MonthRow = ({ month, count }: Props) => {
   return (
     <Group className={classes.group}>
       <Title order={3}>{month}</Title>
-      <Text color="gray">{count} transactions</Text>
+      <Text>{count} transactions</Text>
     </Group>
   );
 };

@@ -7,7 +7,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useListAllAccounts } from "api";
-import { LoadingError } from "components";
+import { LoadingError, PrivacySheild } from "components";
 import { useFinance } from "context";
 import { useEffect, useMemo } from "react";
 import { displayCurrency } from "utils/displayCurrency";
@@ -45,9 +45,11 @@ export const SelectableAccountList = () => {
               <Title className={cx(classes.title)} order={4}>
                 {account.accountName}
               </Title>
-              <Title className={cx(classes.title, classes.textRight)}>
-                {displayCurrency(account.balance!)}
-              </Title>
+              <PrivacySheild style={{ width: "100%" }}>
+                <Title className={cx(classes.title, classes.textRight)}>
+                  {displayCurrency(account.balance!)}
+                </Title>
+              </PrivacySheild>
               <Title className={cx(classes.title)} order={5}>
                 {account.accountType}
               </Title>

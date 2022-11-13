@@ -2,6 +2,7 @@ import {
   Alert,
   createStyles,
   Group,
+  Pagination,
   Select,
   Text,
   TextInput,
@@ -21,11 +22,18 @@ type Props = {
 export const TransactionList = ({ unSanitized, selectedAccount }: Props) => {
   const { classes } = useStyles();
   const [selectedMonth, setSelectedMonth] = useState("All Months");
+  const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [currentAccount, setCurrentAccount] = useState(selectedAccount);
   const { isSuccess, isError, data, isFetching } = unSanitized
-    ? uselistUnsanitizedTransactions({ account: selectedAccount })
-    : useListAllTransactions({ account: selectedAccount });
+    ? uselistUnsanitizedTransactions({
+        account: selectedAccount,
+        pageNumber: currentPage,
+      })
+    : useListAllTransactions({
+        account: selectedAccount,
+        pageNumber: currentPage,
+      });
 
   useEffect(() => {
     setCurrentAccount(selectedAccount);
@@ -113,6 +121,13 @@ export const TransactionList = ({ unSanitized, selectedAccount }: Props) => {
           className={classes.searchInput}
           onChange={(event) => setSearch(event.currentTarget.value)}
         />
+        <Group className={classes.searchInput} position="center">
+          <Pagination
+            total={data.totalPages}
+            radius="lg"
+            onChange={setCurrentPage}
+          />
+        </Group>
       </Group>
       {selectedMonth === "All Months" ? (
         uniqueMonths.map((month) => {
@@ -161,7 +176,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: "space-between",
   },
   searchInput: {
-    flexGrow: 1,
+    flexGrow: 4,
   },
   filterGroup: {
     justifyContent: "flex-start",

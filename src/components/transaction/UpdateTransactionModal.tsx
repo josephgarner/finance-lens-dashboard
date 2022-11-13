@@ -24,6 +24,7 @@ import { useAddSanitizing, useUpdateTransaction } from "api";
 import { useQueryClient } from "react-query";
 import { useEffect, useState } from "react";
 import { useFinance } from "context";
+import { PrivacySheild } from "components/core/PrivacySheild";
 
 type Props = {
   opened: boolean;
@@ -156,11 +157,13 @@ export const UpdateTransactionModal = ({
           <Group className={classes.group}>
             <Group className={classes.group}>
               <Title order={3}>{displayDate(transaction.date)}</Title>
-              <Title>
-                {displayCurrency(
-                  transaction.debit ? transaction.debit : transaction.credit
-                )}
-              </Title>
+              <PrivacySheild>
+                <Title>
+                  {displayCurrency(
+                    transaction.debit ? transaction.debit : transaction.credit
+                  )}
+                </Title>
+              </PrivacySheild>
               <Text align={"center"}>{transaction.rawDescription}</Text>
             </Group>
             <Group className={classes.group} position={"left"} spacing={"xs"}>

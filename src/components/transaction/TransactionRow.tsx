@@ -14,6 +14,7 @@ import { UpdateTransactionModal } from "./UpdateTransactionModal";
 import { useState } from "react";
 import { displayDate } from "utils/displayDate";
 import { TbCheck, TbEye } from "react-icons/tb";
+import { PrivacySheild } from "components/core/PrivacySheild";
 
 type Props = {
   transaction: Transaction;
@@ -53,11 +54,13 @@ export const TransactionRow = ({ transaction }: Props) => {
               ? transaction.sanitizedDescription
               : transaction.rawDescription}
           </Text>
-          <Text>
-            {displayCurrency(
-              transaction.debit ? transaction.debit : transaction.credit
-            )}
-          </Text>
+          <PrivacySheild>
+            <Text>
+              {displayCurrency(
+                transaction.debit ? transaction.debit : transaction.credit
+              )}
+            </Text>
+          </PrivacySheild>
 
           <ActionIcon color="blue" size="sm" onClick={() => setOpenEdit(true)}>
             <FaEdit size={18} />

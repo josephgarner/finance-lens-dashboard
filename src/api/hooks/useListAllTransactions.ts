@@ -7,9 +7,15 @@ import { QueryKey } from "enums";
 
 export const useListAllTransactions = ({
   account,
+  pageNumber,
 }: UpdateTransactionParams) => {
-  const queryKey = [`${QueryKey.ListAllTransactions}-${account}`];
-  return useQuery(queryKey, () => listAllTransactions({ account }), {
-    retry: 1,
-  });
+  const queryKey = [`${QueryKey.ListAllTransactions}-${account}`, pageNumber];
+  return useQuery(
+    queryKey,
+    () => listAllTransactions({ account, pageNumber }),
+    {
+      retry: 1,
+      keepPreviousData: true,
+    }
+  );
 };

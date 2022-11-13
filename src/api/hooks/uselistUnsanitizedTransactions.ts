@@ -7,9 +7,18 @@ import {
 
 export const uselistUnsanitizedTransactions = ({
   account,
+  pageNumber,
 }: ListUnsanitizedTransactionsParams) => {
-  const queryKey = [`${QueryKey.ListUnsanitizedTransactions}-${account}`];
-  return useQuery(queryKey, () => listUnsanitizedTransactions({ account }), {
-    retry: 1,
-  });
+  const queryKey = [
+    `${QueryKey.ListUnsanitizedTransactions}-${account}`,
+    pageNumber,
+  ];
+  return useQuery(
+    queryKey,
+    () => listUnsanitizedTransactions({ account, pageNumber }),
+    {
+      retry: 1,
+      keepPreviousData: true,
+    }
+  );
 };

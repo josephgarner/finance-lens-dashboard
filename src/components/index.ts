@@ -14,3 +14,4 @@ export * from "./accounts/AccountList";
 export * from "./core/CoreNavbar";
 export * from "./core/Link";
 export * from "./core/LoadingError";
+export * from "./core/PrivacySheild";
