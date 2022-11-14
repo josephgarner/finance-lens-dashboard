@@ -26,6 +26,7 @@ import { useQueryClient } from "react-query";
 import { useEffect, useState } from "react";
 import { useFinance } from "context";
 import { PrivacySheild } from "components/core/PrivacySheild";
+import { CategorySelect, SubcategorySelect } from "components";
 
 type Props = {
   opened: boolean;
@@ -46,14 +47,10 @@ export const UpdateTransactionModal = ({
   const { classes } = useStyles();
   const [loading, setLoading] = useState(false);
   const [keywords, setKeyWords] = useState<SelectType[]>([]);
-  const [categoryOptions, setCategoryOptions] = useState<SelectType[]>([]);
-  const [subCategoryOptions, setSubCategoryOptions] = useState<SelectType[]>(
-    []
-  );
   const updateTransaction = useUpdateTransaction();
   const addSanitizing = useAddSanitizing();
   const queryClient = useQueryClient();
-  const { selectedAccount, categories, subcategories } = useFinance();
+  const { selectedAccount, appendSubcategories } = useFinance();
 
   const initialFormValues = {
     sanitizedDescription: transaction.sanitizedDescription || "",
@@ -107,8 +104,6 @@ export const UpdateTransactionModal = ({
 
   useEffect(() => {
     form.setValues(initialFormValues);
-    setCategoryOptions(populateSelect(categories));
-    setSubCategoryOptions(populateSelect(subcategories));
   }, [transaction]);
 
   const handleSubmit = async (transaction: Transaction) => {
@@ -127,12 +122,6 @@ export const UpdateTransactionModal = ({
 
   const handleSanitize = async (sanitized: Sanitization) => {
     await addSanitizing.mutateAsync(sanitized);
-  };
-
-  const populateSelect = (options: string[]) => {
-    return options.map((option) => {
-      return { value: option, label: option };
-    });
   };
 
   return (
@@ -228,37 +217,13 @@ export const UpdateTransactionModal = ({
               withAsterisk
               {...form.getInputProps("sanitizedDescription")}
             />
-            <Select
+            <CategorySelect
               className={classes.input}
-              label="Category"
-              description="The category to which this transaction falls under"
-              searchable
-              nothingFound="No options"
-              data={categoryOptions}
-              {...form.getInputProps("category")}
-              creatable
-              getCreateLabel={(query) => `+ Create ${query}`}
-              onCreate={(query) => {
-                const item = { value: query, label: query };
-                setCategoryOptions((current) => [...current, item]);
-                return item;
-              }}
+              props={form.getInputProps("category")}
             />
-            <Select
+            <SubcategorySelect
               className={classes.input}
-              label="Subcategory"
-              description="The subcategory to which this transaction falls under."
-              searchable
-              nothingFound="No options"
-              data={subCategoryOptions}
-              creatable
-              {...form.getInputProps("subcategory")}
-              getCreateLabel={(query) => `+ Create ${query}`}
-              onCreate={(query) => {
-                const item = { value: query, label: query };
-                setSubCategoryOptions((current) => [...current, item]);
-                return item;
-              }}
+              props={form.getInputProps("subcategory")}
             />
             <TextInput
               className={classes.input}

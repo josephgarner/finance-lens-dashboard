@@ -15,7 +15,9 @@ interface FinanceContextInterface {
   privacyMode: boolean;
   togglePrivacyMode: () => void;
   categories: string[];
+  appendCategory: (category: string) => void;
   subcategories: string[];
+  appendSubcategories: (subcategory: string) => void;
 }
 
 const defaultValue = {
@@ -26,7 +28,9 @@ const defaultValue = {
   privacyMode: false,
   togglePrivacyMode: () => {},
   categories: [],
+  appendCategory: (category: string) => {},
   subcategories: [],
+  appendSubcategories: (subcategory: string) => {},
 };
 
 const FinanceContext = createContext<FinanceContextInterface>(defaultValue);
@@ -55,6 +59,28 @@ export const FinanceContextProvider = ({ children }: Props) => {
       });
     }
   }, [getCategories.isSuccess]);
+
+  const appendCategory = (category: string) => {
+    setData((prev) => {
+      const categories = prev.categories;
+      categories.push(category);
+      return {
+        ...prev,
+        categories: categories,
+      };
+    });
+  };
+
+  const appendSubcategories = (subcategory: string) => {
+    setData((prev) => {
+      const subcategories = prev.subcategories;
+      subcategories.push(subcategory);
+      return {
+        ...prev,
+        subcategories: subcategories,
+      };
+    });
+  };
 
   const setSelectedAccount = (account: string) => {
     setData((prev) => {
@@ -88,6 +114,8 @@ export const FinanceContextProvider = ({ children }: Props) => {
     setDisplayMode,
     setSelectedAccount,
     togglePrivacyMode,
+    appendCategory,
+    appendSubcategories,
   });
 
   return (

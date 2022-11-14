@@ -16,6 +16,8 @@ import { Sanitization } from "types";
 import { useDeleteSanitizing, useUpdateSanitization } from "api";
 import { useQueryClient } from "react-query";
 import { useEffect, useState } from "react";
+import { CategorySelect } from "components/core/CategorySelect";
+import { SubcategorySelect } from "components/core/SubcategorySelect";
 
 type Props = {
   opened: boolean;
@@ -45,6 +47,7 @@ export const UpdateSanitizationModal = ({
     sanitizedDescription: sanitization.sanitizedDescription || "",
     type: sanitization.type,
     category: sanitization.category || "",
+    subcategory: sanitization.subcategory || "",
     vendor: sanitization.vendor || "",
   };
 
@@ -64,6 +67,11 @@ export const UpdateSanitizationModal = ({
         if (value == "") {
           return "Please enter a catergory";
         }
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
+        }
+      },
+      subcategory: (value: string) => {
         if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
           return "This field can only contain letters, - and numbers";
         }
@@ -176,15 +184,13 @@ export const UpdateSanitizationModal = ({
                 </Chip>
               </Chip.Group>
             </Group>
-            <TextInput
+            <CategorySelect
               className={classes.input}
-              label="Category"
-              description="The category to which this transaction falls under"
-              placeholder="Eating out"
-              radius="lg"
-              withAsterisk
-              required
-              {...form.getInputProps("category")}
+              props={form.getInputProps("category")}
+            />
+            <SubcategorySelect
+              className={classes.input}
+              props={form.getInputProps("subcategory")}
             />
             <TextInput
               className={classes.input}

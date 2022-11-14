@@ -6,12 +6,11 @@ import {
   Title,
   Button,
   Alert,
-  NativeSelect,
   useMantineTheme,
   LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Bank, QueryKey, TransactionType } from "enums";
+import { Bank, QueryKey } from "enums";
 import { useListAllAccounts } from "api";
 import { useQueryClient } from "react-query";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
@@ -26,6 +25,7 @@ import { useMemo, useState } from "react";
 import { listAllAccountNames } from "utils/listAllAccountNames";
 import { useUploadTransactionRecord } from "api/hooks/useUploadTransactionRecord";
 import { delay } from "underscore";
+import { GenericSelect } from "components";
 
 type Props = {
   opened: boolean;
@@ -150,16 +150,13 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
                 </Group>
               </Dropzone>
             )}
-            <NativeSelect
+            <GenericSelect
               className={classes.input}
-              data={["", Bank.ING]}
-              placeholder="ING"
+              data={[Bank.ING]}
               label="Bank Selection"
               description="Select the bank where the transaction record was exported from"
-              radius="lg"
               withAsterisk
-              disabled={!listAccounts.isSuccess}
-              {...form.getInputProps("bank")}
+              props={form.getInputProps("bank")}
             />
             <Alert icon={<TbInfoCircle size={16} />} color="orange" radius="lg">
               <Text>
@@ -167,15 +164,13 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
                 please contact support.
               </Text>
             </Alert>
-            <NativeSelect
+            <GenericSelect
               className={classes.input}
-              data={["", ...listAllAccountNames(accounts)]}
-              placeholder="Savings Account"
+              data={[...listAllAccountNames(accounts)]}
               label="Account Selection"
               description="Select account that this transaction record is related to"
-              radius="lg"
               withAsterisk
-              {...form.getInputProps("account")}
+              props={form.getInputProps("account")}
             />
             <Button type={"submit"} disabled={!file}>
               Update Transaction

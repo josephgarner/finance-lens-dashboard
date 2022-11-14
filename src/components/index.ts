@@ -15,3 +15,6 @@ export * from "./core/CoreNavbar";
 export * from "./core/Link";
 export * from "./core/LoadingError";
 export * from "./core/PrivacySheild";
+export * from "./core/CategorySelect";
+export * from "./core/SubcategorySelect";
+export * from "./core/GenericSelect";
