@@ -42,19 +42,23 @@ export const SanitizationRow = ({ sanitization }: Props) => {
       />
       <Paper className={classes.paper}>
         <Grid className={classes.grid} columns={24}>
-          <Grid.Col className={classes.col} span={4}>
+          <Grid.Col className={classes.col} span={5}>
             <Text className={classes.title}>Type</Text>
             <TypeBadge type={sanitization.type} />
           </Grid.Col>
-          <Grid.Col className={classes.col} span={4}>
+          <Grid.Col className={classes.col} span={5}>
             <Text className={classes.title}>Category</Text>
             <Text>{sanitization.category}</Text>
           </Grid.Col>
-          <Grid.Col className={classes.col} span={4}>
+          <Grid.Col className={classes.col} span={6}>
+            <Text className={classes.title}>Subcategory</Text>
+            <Text>{sanitization.subcategory}</Text>
+          </Grid.Col>
+          <Grid.Col className={classes.col} span={6}>
             <Text className={classes.title}>Vendor</Text>
             <Text>{sanitization.vendor}</Text>
           </Grid.Col>
-          <Grid.Col className={classes.col} span={10}>
+          <Grid.Col className={classes.col} span={22}>
             <Text className={classes.title}>Description</Text>
             <Text className={classes.description}>
               {sanitization.sanitizedDescription}

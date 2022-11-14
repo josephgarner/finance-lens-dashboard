@@ -2,14 +2,15 @@ export enum Endpoint {
   UploadTransactionRecord = "upload-history",
   ListAllTransactions = "list-all",
   ListUnsanitizedTransactions = "list-unsanitized",
-  ListAllTransactionsPerAccount = "list-all/:account/:pageNumber",
-  ListUnsanitizedTransactionsPerAccount = "list-unsanitized/:account/:pageNumber",
+  ListAllTransactionsPerAccount = "list-all",
+  ListUnsanitizedTransactionsPerAccount = "list-unsanitized",
   UpdateTransaction = "update",
   AddSanitizing = "add-sanitizing",
-  RunSanitization = "run-sanitization/:account",
+  RunSanitization = "run-sanitization",
   ListAllSanitizing = "list-sanitizing",
   UpdateSanitization = "update-sanitizing",
   DeleteSanitizing = "delete-sanitizing",
+  ListCategoies = "list-categories",
 
   ListAllAccounts = "list-all",
   CreateAccount = "create",
@@ -36,6 +37,7 @@ export enum QueryKey {
   ListAllTransactions = "list-all-transactions",
   ListUnsanitizedTransactions = "list-unsanitized-transactions",
   ListAllSanitizing = "list-all-sanitizing",
+  ListCategoies = "list-categories",
 
   ListAllAccounts = "list-all-accounts",
 }

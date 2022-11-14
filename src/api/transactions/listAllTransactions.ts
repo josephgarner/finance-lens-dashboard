@@ -2,9 +2,9 @@ import { get } from "api/utils/get";
 import { Endpoint, Service } from "enums";
 import { Transaction } from "types";
 
-export type UpdateTransactionParams = {
+export type ListAllTransactionsParams = {
   account: string;
-  pageNumber: number;
+  pageNumber: string | number;
 };
 
 export type ListAllTransactionsResponse = {
@@ -14,18 +14,15 @@ export type ListAllTransactionsResponse = {
 };
 
 export const listAllTransactions = async (
-  params: UpdateTransactionParams
+  params: ListAllTransactionsParams
 ): Promise<ListAllTransactionsResponse> => {
-  let endpoint = Endpoint.ListAllTransactionsPerAccount.replace(
-    ":account",
-    params.account || ""
-  );
-  endpoint = endpoint.replace(":pageNumber", `${params.pageNumber}` || "");
-  const response = await get<{}, ListAllTransactionsResponse>(
-    Service.Transaction,
-    endpoint,
-    {}
-  );
+  const response = await get<
+    ListAllTransactionsParams,
+    ListAllTransactionsResponse
+  >(Service.Transaction, Endpoint.ListAllTransactionsPerAccount, {
+    account: params.account || "",
+    pageNumber: params.pageNumber || "",
+  });
   return {
     ...response.result,
   };

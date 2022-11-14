@@ -10,22 +10,19 @@ export type ListUnsanitizedTransactionsResponse = {
 
 export type ListUnsanitizedTransactionsParams = {
   account: string;
-  pageNumber: number;
+  pageNumber: number | string;
 };
 
 export const listUnsanitizedTransactions = async (
   params: ListUnsanitizedTransactionsParams
 ): Promise<ListUnsanitizedTransactionsResponse> => {
-  let endpoint = Endpoint.ListUnsanitizedTransactionsPerAccount.replace(
-    ":account",
-    params.account || ""
-  );
-  endpoint = endpoint.replace(":pageNumber", `${params.pageNumber}` || "");
-  const response = await get<{}, ListUnsanitizedTransactionsResponse>(
-    Service.Transaction,
-    endpoint,
-    {}
-  );
+  const response = await get<
+    ListUnsanitizedTransactionsParams,
+    ListUnsanitizedTransactionsResponse
+  >(Service.Transaction, Endpoint.ListUnsanitizedTransactionsPerAccount, {
+    account: params.account || "",
+    pageNumber: params.pageNumber || "",
+  });
   return {
     ...response.result,
   };

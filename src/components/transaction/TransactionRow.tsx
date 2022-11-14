@@ -46,14 +46,17 @@ export const TransactionRow = ({ transaction }: Props) => {
             <TypeBadge type={transaction.type} />
           </Group>
           <Group className={classes.sectionGroups}>
-            <Text>{transaction.vendor}</Text>
-            <Text>{transaction.category}</Text>
+            <Group>
+              <Text>{transaction.vendor}</Text>
+              <Text>{transaction.category}</Text>
+              <Text>{transaction.subcategory}</Text>
+            </Group>
+            <Text className={classes.description}>
+              {isSanitized
+                ? transaction.sanitizedDescription
+                : transaction.rawDescription}
+            </Text>
           </Group>
-          <Text className={classes.description}>
-            {isSanitized
-              ? transaction.sanitizedDescription
-              : transaction.rawDescription}
-          </Text>
           <PrivacySheild>
             <Text>
               {displayCurrency(
@@ -87,6 +90,7 @@ const useStyles = createStyles((theme) => ({
   sectionGroups: {
     flexDirection: "column",
     alignItems: "flex-start",
+    flexGrow: 4,
   },
   icon: {
     minWidth: 20,

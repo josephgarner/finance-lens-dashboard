@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { useListCategories } from "api";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface FinanceContextInterface {
   displayMode: string;
@@ -7,6 +14,8 @@ interface FinanceContextInterface {
   setSelectedAccount: (accountName: string) => void;
   privacyMode: boolean;
   togglePrivacyMode: () => void;
+  categories: string[];
+  subcategories: string[];
 }
 
 const defaultValue = {
@@ -16,6 +25,8 @@ const defaultValue = {
   setSelectedAccount: (accountName: string) => {},
   privacyMode: false,
   togglePrivacyMode: () => {},
+  categories: [],
+  subcategories: [],
 };
 
 const FinanceContext = createContext<FinanceContextInterface>(defaultValue);
@@ -25,7 +36,26 @@ type Props = {
   children: ReactNode;
 };
 
+type Categories = {
+  categories: string[];
+  subcategories: string[];
+};
+
 export const FinanceContextProvider = ({ children }: Props) => {
+  const getCategories = useListCategories();
+
+  useEffect(() => {
+    if (getCategories.data) {
+      setData((prev) => {
+        return {
+          ...prev,
+          categories: getCategories.data.categories,
+          subcategories: getCategories.data.subcategories,
+        };
+      });
+    }
+  }, [getCategories.isSuccess]);
+
   const setSelectedAccount = (account: string) => {
     setData((prev) => {
       return {
@@ -53,7 +83,7 @@ export const FinanceContextProvider = ({ children }: Props) => {
     });
   };
 
-  const [data, setData] = useState<FinanceContextInterface>({
+  const [providerData, setData] = useState<FinanceContextInterface>({
     ...defaultValue,
     setDisplayMode,
     setSelectedAccount,
@@ -61,7 +91,9 @@ export const FinanceContextProvider = ({ children }: Props) => {
   });
 
   return (
-    <FinanceContext.Provider value={data}>{children}</FinanceContext.Provider>
+    <FinanceContext.Provider value={providerData}>
+      {children}
+    </FinanceContext.Provider>
   );
 };
 

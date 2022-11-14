@@ -23,10 +23,16 @@ export async function post<Body extends JSONSerializable | FormData, Response>(
       : {
           json: body,
         };
+
   const baseURL = import.meta.env.VITE_FINANCE_LENS_SERVICE_ADDRESS;
   const port = import.meta.env.VITE_FINANCE_LENS_SERVICE_PORT;
+  const enviroment = import.meta.env.VITE_ENV;
 
-  const url = `${baseURL}:${port}/api/${service}/${endpoint}`;
+  const url =
+    enviroment === "production"
+      ? `${baseURL}/v1/${service}/${endpoint}`
+      : `${baseURL}:${port}/v1/${service}/${endpoint}`;
+
   const response = (await ky.post(url, postOptions).json()) as {
     result: Response;
   };

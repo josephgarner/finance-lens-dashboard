@@ -11,7 +11,7 @@ export const PrivacySheild = ({ children, style }: Props) => {
   const { privacyMode } = useFinance();
 
   const { classes, cx } = useStyles();
-  console.log(privacyMode);
+
   return (
     <Box style={{ ...style }} className={cx(privacyMode && classes.enabled)}>
       {children}

@@ -13,6 +13,7 @@ import {
   Alert,
   LoadingOverlay,
   MultiSelect,
+  Select,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { QueryKey, TransactionType } from "enums";
@@ -32,7 +33,7 @@ type Props = {
   transaction: Transaction;
 };
 
-type Keyword = {
+type SelectType = {
   value: string;
   label: string;
 };
@@ -44,16 +45,21 @@ export const UpdateTransactionModal = ({
 }: Props) => {
   const { classes } = useStyles();
   const [loading, setLoading] = useState(false);
-  const [keywords, setKeyWords] = useState<Keyword[]>([]);
+  const [keywords, setKeyWords] = useState<SelectType[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<SelectType[]>([]);
+  const [subCategoryOptions, setSubCategoryOptions] = useState<SelectType[]>(
+    []
+  );
   const updateTransaction = useUpdateTransaction();
   const addSanitizing = useAddSanitizing();
   const queryClient = useQueryClient();
-  const { selectedAccount } = useFinance();
+  const { selectedAccount, categories, subcategories } = useFinance();
 
   const initialFormValues = {
     sanitizedDescription: transaction.sanitizedDescription || "",
     type: transaction.type,
     category: transaction.category || "",
+    subcategory: transaction.subcategory || "",
     vendor: transaction.vendor || "",
     useSanitize: false,
     keyword: [""],
@@ -74,9 +80,11 @@ export const UpdateTransactionModal = ({
         }
       },
       category: (value: string) => {
-        if (value == "") {
-          return "Please enter a catergory";
+        if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
+          return "This field can only contain letters, - and numbers";
         }
+      },
+      subcategory: (value: string) => {
         if (!/^[a-zA-Z0-9-\s]*$/.test(value)) {
           return "This field can only contain letters, - and numbers";
         }
@@ -99,6 +107,8 @@ export const UpdateTransactionModal = ({
 
   useEffect(() => {
     form.setValues(initialFormValues);
+    setCategoryOptions(populateSelect(categories));
+    setSubCategoryOptions(populateSelect(subcategories));
   }, [transaction]);
 
   const handleSubmit = async (transaction: Transaction) => {
@@ -117,6 +127,12 @@ export const UpdateTransactionModal = ({
 
   const handleSanitize = async (sanitized: Sanitization) => {
     await addSanitizing.mutateAsync(sanitized);
+  };
+
+  const populateSelect = (options: string[]) => {
+    return options.map((option) => {
+      return { value: option, label: option };
+    });
   };
 
   return (
@@ -139,6 +155,7 @@ export const UpdateTransactionModal = ({
               sanitizedDescription: values.sanitizedDescription,
               type: values.type,
               category: values.category,
+              subcategory: values.subcategory,
               vendor: values.vendor,
             };
             if (values.useSanitize) {
@@ -147,6 +164,7 @@ export const UpdateTransactionModal = ({
                 sanitizedDescription: values.sanitizedDescription,
                 type: values.type,
                 category: values.category,
+                subcategory: values.subcategory,
                 vendor: values.vendor,
               };
               handleSanitize(sanitize);
@@ -210,20 +228,42 @@ export const UpdateTransactionModal = ({
               withAsterisk
               {...form.getInputProps("sanitizedDescription")}
             />
-            <TextInput
+            <Select
               className={classes.input}
               label="Category"
               description="The category to which this transaction falls under"
-              placeholder="Eating out"
-              radius="lg"
-              withAsterisk
+              searchable
+              nothingFound="No options"
+              data={categoryOptions}
               {...form.getInputProps("category")}
+              creatable
+              getCreateLabel={(query) => `+ Create ${query}`}
+              onCreate={(query) => {
+                const item = { value: query, label: query };
+                setCategoryOptions((current) => [...current, item]);
+                return item;
+              }}
+            />
+            <Select
+              className={classes.input}
+              label="Subcategory"
+              description="The subcategory to which this transaction falls under."
+              searchable
+              nothingFound="No options"
+              data={subCategoryOptions}
+              creatable
+              {...form.getInputProps("subcategory")}
+              getCreateLabel={(query) => `+ Create ${query}`}
+              onCreate={(query) => {
+                const item = { value: query, label: query };
+                setSubCategoryOptions((current) => [...current, item]);
+                return item;
+              }}
             />
             <TextInput
               className={classes.input}
               label="vendor"
               description="The vendor where the transaction occured"
-              placeholder="Blue Bird Cafe"
               radius="lg"
               withAsterisk
               {...form.getInputProps("vendor")}

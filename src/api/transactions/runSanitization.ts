@@ -11,10 +11,9 @@ export type RunSanitizationResponse = {};
 export const runSanitization = async (
   params: UpdateTransactionParams
 ): Promise<RunSanitizationResponse> => {
-  const endpoint = Endpoint.RunSanitization.replace(":account", params.account);
-  return await post<{}, RunSanitizationResponse>(
+  return await post<RunSanitizationResponse, RunSanitizationResponse>(
     Service.Transaction,
-    endpoint,
-    {}
+    Endpoint.RunSanitization,
+    { account: params.account }
   );
 };

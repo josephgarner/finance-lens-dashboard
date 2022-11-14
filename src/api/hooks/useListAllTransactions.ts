@@ -1,6 +1,6 @@
 import {
   listAllTransactions,
-  UpdateTransactionParams,
+  ListAllTransactionsParams,
 } from "api/transactions/listAllTransactions";
 import { useQuery } from "react-query";
 import { QueryKey } from "enums";
@@ -8,7 +8,7 @@ import { QueryKey } from "enums";
 export const useListAllTransactions = ({
   account,
   pageNumber,
-}: UpdateTransactionParams) => {
+}: ListAllTransactionsParams) => {
   const queryKey = [`${QueryKey.ListAllTransactions}-${account}`, pageNumber];
   return useQuery(
     queryKey,
