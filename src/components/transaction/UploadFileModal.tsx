@@ -57,19 +57,19 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
     },
   });
 
-  const handleSubmit = (bank: string, account: string) => {
+  const handleSubmit = async (bank: string, account: string) => {
     setLoading(true);
     const formData = new FormData();
     formData.append("transactionRecord", file!, file!.name);
     formData.append("bank", bank);
     formData.append("account", account);
 
-    // upload.mutateAsync(formData);
-    delay(() => {}, 1000);
-    queryClient.refetchQueries({
+    await upload.mutateAsync(formData);
+    await delay(() => {}, 1000);
+    await queryClient.refetchQueries({
       queryKey: [QueryKey.ListAllTransactions],
     });
-    queryClient.refetchQueries({
+    await queryClient.refetchQueries({
       queryKey: [QueryKey.ListUnsanitizedTransactions],
     });
     setOpen(false);
@@ -92,8 +92,8 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
       <div style={{ position: "relative" }}>
         <LoadingOverlay visible={loading} overlayBlur={2} />
         <form
-          onSubmit={form.onSubmit((values) => {
-            handleSubmit(values.bank, values.account);
+          onSubmit={form.onSubmit(async (values) => {
+            await handleSubmit(values.bank, values.account);
           })}
         >
           <Group className={classes.group}>
