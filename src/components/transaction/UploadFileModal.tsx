@@ -65,7 +65,7 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
     formData.append("account", account);
 
     await upload.mutateAsync(formData);
-    await delay(() => {}, 1000);
+    await delay(() => {}, 3000);
     await queryClient.refetchQueries({
       queryKey: [QueryKey.ListAllTransactions],
     });
@@ -111,7 +111,7 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
                 onDrop={(files) => setFile(files[0])}
                 onReject={(files) => console.log("rejected files", files)}
                 maxSize={7 * 1024 ** 2}
-                accept={[MIME_TYPES.csv]}
+                accept={[MIME_TYPES.csv, MIME_TYPES.xls, MIME_TYPES.xlsx]}
               >
                 <Group
                   position="center"
@@ -173,7 +173,7 @@ export const UploadFileModal = ({ opened = false, setOpen }: Props) => {
               props={form.getInputProps("account")}
             />
             <Button type={"submit"} disabled={!file}>
-              Update Transaction
+              Upload Transaction Record
             </Button>
           </Group>
         </form>

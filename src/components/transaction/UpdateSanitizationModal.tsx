@@ -101,9 +101,10 @@ export const UpdateSanitizationModal = ({
     );
   }, [sanitization]);
 
-  const handleSubmit = async (sanitization: Sanitization) => {
+  const handleSubmit = async (data: Sanitization) => {
     setLoading(true);
-    await updateSanitization.mutateAsync(sanitization);
+
+    await updateSanitization.mutateAsync(data);
     await queryClient.refetchQueries({
       queryKey: [QueryKey.ListAllSanitizing],
     });
@@ -123,7 +124,6 @@ export const UpdateSanitizationModal = ({
     setOpen(false);
     setLoading(false);
   };
-
   return (
     <Modal
       opened={opened}

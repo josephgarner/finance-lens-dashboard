@@ -1,4 +1,5 @@
 import { createStyles, Group, Paper, Title } from "@mantine/core";
+import { PrivacySheild } from "components/core/PrivacySheild";
 import { Account } from "types";
 import { displayCurrency } from "utils/displayCurrency";
 
@@ -20,7 +21,9 @@ export const AccountRow = ({ account }: Props) => {
         <Title order={2}>{account.accountName}</Title>
         <Title order={5}>{account.accountType}</Title>
       </Group>
-      <Title>{displayCurrency(account.balance!)}</Title>
+      <PrivacySheild>
+        <Title>{displayCurrency(account.balance!)}</Title>
+      </PrivacySheild>
     </Paper>
   );
 };

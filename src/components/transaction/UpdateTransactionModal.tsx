@@ -203,7 +203,6 @@ export const UpdateTransactionModal = ({
                   color="yellow"
                   variant="filled"
                   size="md"
-                  disabled={transaction.credit ? true : false}
                 >
                   {TransactionType.TRANSFER}
                 </Chip>
