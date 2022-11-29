@@ -10,3 +10,6 @@ export * from "./useListCategories";
 // Accounts
 export * from "./useListAllAccounts";
 export * from "./useCreateAccount";
+
+// Core
+export * from "./useDeleteAll";

@@ -9,7 +9,7 @@ import {
 import {
   SelectableAccountList,
   TransactionList,
-  TransactionActions,
+  TransactionActionCenter,
 } from "components";
 import { useFinance } from "context";
 import { FaInfoCircle } from "react-icons/fa";
@@ -21,9 +21,9 @@ export const Transactions = () => {
 
   return (
     <Container className={classes.container}>
+      <TransactionActionCenter />
       <Title className={classes.title}>Transactions</Title>
       <SelectableAccountList />
-      <TransactionActions />
       {!selectedAccount ? (
         <Alert icon={<FaInfoCircle size={16} />}>
           <>
@@ -36,7 +36,7 @@ export const Transactions = () => {
         </Alert>
       ) : (
         <Tabs
-          variant="outline"
+          variant="pills"
           radius="lg"
           defaultValue="Outstanding"
           classNames={{ tabLabel: classes.tab }}

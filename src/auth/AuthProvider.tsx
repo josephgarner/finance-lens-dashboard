@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }: Props) => {
       onRedirectCallback={onRedirectCallback}
       audience={audidience}
       scope={scope}
+      cacheLocation="localstorage"
     >
       {children}
     </Auth0Provider>

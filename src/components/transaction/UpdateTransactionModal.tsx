@@ -50,7 +50,7 @@ export const UpdateTransactionModal = ({
   const updateTransaction = useUpdateTransaction();
   const addSanitizing = useAddSanitizing();
   const queryClient = useQueryClient();
-  const { selectedAccount, appendSubcategories } = useFinance();
+  const { selectedAccount } = useFinance();
 
   const initialFormValues = {
     sanitizedDescription: transaction.sanitizedDescription || "",

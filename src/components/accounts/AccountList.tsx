@@ -28,6 +28,7 @@ export const AccountList = () => {
           radius="lg"
           variant="light"
           onClick={() => setOpenCreate(true)}
+          data-testid="create-account-button"
         >
           <TbPlus size={28} />
         </ActionIcon>

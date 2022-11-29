@@ -17,13 +17,15 @@ import {
   TbUser,
   TbEye,
   TbEyeOff,
+  TbTrash,
 } from "react-icons/tb";
 import { RiCoinLine } from "react-icons/ri";
 import { useFinance } from "context";
+import { useDeleteAll } from "api";
 
 export const CoreNavbar = () => {
   const { classes } = useStyles();
-
+  const deleteAll = useDeleteAll();
   const { togglePrivacyMode, privacyMode } = useFinance();
 
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
@@ -51,6 +53,7 @@ export const CoreNavbar = () => {
             to={Paths.Transactions}
             leftIcon={<TbArrowsLeftRight size={20} />}
             variant="white"
+            data-testid="transactions-view-button"
           >
             Transactions
           </Button>
@@ -77,6 +80,16 @@ export const CoreNavbar = () => {
       </Navbar.Section>
       <Navbar.Section>
         <Group position="center">
+          <ActionIcon
+            // className={classes.action}
+            size="xl"
+            radius="lg"
+            variant="transparent"
+            data-testid="delete-all-data-button"
+            onClick={async () => await deleteAll.mutateAsync({})}
+          >
+            <TbTrash size={28} />
+          </ActionIcon>
           <ActionIcon
             // className={classes.action}
             size="xl"

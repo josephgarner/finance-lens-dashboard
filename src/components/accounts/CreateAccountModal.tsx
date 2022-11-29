@@ -102,6 +102,7 @@ export const CreateAccountModal = ({
                 {...form.getInputProps("accountName")}
               />
               <Select
+                name="bank"
                 className={classes.input}
                 label="Bank"
                 placeholder="Select Bank"

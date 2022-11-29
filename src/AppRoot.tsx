@@ -4,7 +4,13 @@ import { RequiresAuth } from "auth";
 import { retreiveAPIToken } from "auth/retreiveAPIToken";
 import { CoreNavbar } from "components";
 import { Paths } from "enums";
-import { Accounts, Home, SanitizeTransactions, Transactions } from "pages";
+import {
+  Accounts,
+  Home,
+  SanitizeTransactions,
+  Transactions,
+  UploadRecord,
+} from "pages";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useIsHomePage } from "utils/useIsHomePage";
@@ -46,6 +52,10 @@ export const AppRoot = () => {
         <Route
           path={Paths.Transactions}
           element={<RequiresAuth component={Transactions} />}
+        />
+        <Route
+          path={Paths.UploadRecord}
+          element={<RequiresAuth component={UploadRecord} />}
         />
         <Route
           path={Paths.SanitizeTransactions}

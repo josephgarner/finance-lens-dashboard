@@ -14,11 +14,14 @@ export enum Endpoint {
 
   ListAllAccounts = "list-all",
   CreateAccount = "create",
+
+  DeleteAll = "delete-data",
 }
 
 export enum Service {
   Transaction = "transaction",
   Account = "account",
+  Core = "core",
 }
 
 export enum TransactionType {
@@ -49,6 +52,7 @@ export enum Bank {
 export enum Paths {
   Home = "/",
   Transactions = "/transactions",
+  UploadRecord = "/transactions/upload-record",
   SanitizeTransactions = "/sanitize-transactions",
   Accounts = "/accounts",
   Login = "/login",

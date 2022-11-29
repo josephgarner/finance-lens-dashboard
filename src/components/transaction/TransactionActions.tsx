@@ -5,7 +5,7 @@ import { QueryKey } from "enums";
 import { useState } from "react";
 import { TbBookUpload, TbRefreshDot } from "react-icons/tb";
 import { useQueryClient } from "react-query";
-import { UploadFileModal } from "./UploadFileModal";
+// import { UploadFileModal } from "./UploadFileForm";
 
 export const TransactionActions = () => {
   const runSanitization = useRunSanitization();
@@ -19,7 +19,7 @@ export const TransactionActions = () => {
 
   return (
     <>
-      <UploadFileModal opened={openUpload} setOpen={setOpenUpload} />
+      {/* <UploadFileModal opened={openUpload} setOpen={setOpenUpload} /> */}
       <Group className={classes.group}>
         <Button leftIcon={<TbBookUpload />} onClick={() => setOpenUpload(true)}>
           Upload Transaction Record
