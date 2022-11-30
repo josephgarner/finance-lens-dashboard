@@ -53,6 +53,7 @@ export enum Paths {
   Home = "/",
   Transactions = "/transactions",
   UploadRecord = "/transactions/upload-record",
+  UpdateTransaction = "/transactions/update",
   SanitizeTransactions = "/sanitize-transactions",
   Accounts = "/accounts",
   Login = "/login",

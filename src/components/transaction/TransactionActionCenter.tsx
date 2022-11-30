@@ -13,7 +13,6 @@ import { Paths, QueryKey } from "enums";
 import { useState } from "react";
 import { TbBookUpload, TbEdit, TbRefreshDot } from "react-icons/tb";
 import { useQueryClient } from "react-query";
-import { UpdateTransactionModal } from "./UpdateTransactionModal";
 
 /**
  * To use framer-motion the elements will need to be wrapped in motion.
@@ -31,10 +30,9 @@ export const TransactionActionCenter = () => {
   const [matchLoading, setMatchLoading] = useState(false);
 
   const [openUpload, setOpenUpload] = useState(false);
-
+  //UpdateTransaction
   return (
     <Affix className={classes.affix}>
-      {/* <UploadFileModal opened={openUpload} setOpen={setOpenUpload} /> */}
       <Group className={classes.group} spacing={"lg"}>
         <Group className={classes.subGroup}>
           <Tooltip label="Upload Record">
@@ -42,13 +40,19 @@ export const TransactionActionCenter = () => {
               component={Link}
               to={Paths.UploadRecord}
               size={"lg"}
-              onClick={() => setOpenUpload(true)}
+              data-testid="upload-transaction-button"
             >
               <TbBookUpload size={42} />
             </ActionIcon>
           </Tooltip>
           <Tooltip label="Edit">
-            <ActionIcon size={"xl"} disabled={!selectedTransaction}>
+            <ActionIcon<typeof Link>
+              component={Link}
+              to={Paths.UpdateTransaction}
+              size={"xl"}
+              disabled={!selectedTransaction}
+              data-testid="edit-transaction-button"
+            >
               <TbEdit size={42} />
             </ActionIcon>
           </Tooltip>

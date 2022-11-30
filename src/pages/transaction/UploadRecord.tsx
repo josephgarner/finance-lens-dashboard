@@ -1,22 +1,6 @@
-import {
-  createStyles,
-  Container,
-  Title,
-  Tabs,
-  Alert,
-  Text,
-} from "@mantine/core";
-import {
-  SelectableAccountList,
-  TransactionList,
-  TransactionActions,
-  TransactionActionCenter,
-  BackButton,
-  UploadFileForm,
-} from "components";
-import { useFinance } from "context";
+import { createStyles, Container, Title } from "@mantine/core";
+import { BackButton, UploadFileForm } from "components";
 import { Paths } from "enums";
-import { FaInfoCircle } from "react-icons/fa";
 
 export const UploadRecord = () => {
   const { classes } = useStyles();

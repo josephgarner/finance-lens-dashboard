@@ -5,7 +5,7 @@ describe("[Transactions]: upload csv file", () => {
     cy.login();
 
     cy.findAllByTestId("transactions-view-button").click();
-    cy.findByText("Upload Transaction Record").click().wait(500);
+    cy.findAllByTestId("upload-transaction-button").click();
 
     cy.findAllByTestId("transactions-upload-dropzone").selectFile(
       "./cypress/fixtures/test_transactions.csv",
@@ -24,7 +24,7 @@ describe("[Transactions]: upload csv file", () => {
       .type("{downArrow}")
       .type("{enter}");
 
-    cy.findByRole("button", { name: /Upload Transaction Record/i }).click();
+    cy.findByRole("button", { name: /Upload/i }).click();
 
     cy.findByText("E2E spending").click();
 

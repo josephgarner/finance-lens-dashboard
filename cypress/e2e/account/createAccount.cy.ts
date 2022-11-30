@@ -17,7 +17,5 @@ describe("[Account]: create account", () => {
     cy.findByRole("button", { name: /create account/i }).click();
 
     cy.findByText("$0.00");
-
-    // cy.findAllByTestId("delete-all-data-button").click();
   });
 });

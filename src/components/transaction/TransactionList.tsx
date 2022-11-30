@@ -166,7 +166,7 @@ export const TransactionList = ({ unSanitized, selectedAccount }: Props) => {
 
 const useStyles = createStyles((theme) => ({
   container: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.xl,
   },
   width100: {
     width: "100%",

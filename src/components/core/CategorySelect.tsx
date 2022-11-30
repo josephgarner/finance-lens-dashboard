@@ -28,7 +28,7 @@ export const CategorySelect = ({ className, props }: Props) => {
   return (
     <Select
       className={className}
-      label="Category"
+      label="Transaction Category"
       description="The category to which this transaction falls under"
       searchable
       nothingFound="No options"

@@ -9,6 +9,7 @@ import {
   Home,
   SanitizeTransactions,
   Transactions,
+  UpdateTransaction,
   UploadRecord,
 } from "pages";
 import { useEffect } from "react";
@@ -56,6 +57,10 @@ export const AppRoot = () => {
         <Route
           path={Paths.UploadRecord}
           element={<RequiresAuth component={UploadRecord} />}
+        />
+        <Route
+          path={Paths.UpdateTransaction}
+          element={<RequiresAuth component={UpdateTransaction} />}
         />
         <Route
           path={Paths.SanitizeTransactions}

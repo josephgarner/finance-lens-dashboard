@@ -6,6 +6,7 @@ export * from "./transaction/TransactionActions";
 export * from "./transaction/UploadFileForm";
 export * from "./transaction/SanitizationList";
 export * from "./transaction/TransactionActionCenter";
+export * from "./transaction/UpdateTransactionForm";
 
 export * from "./accounts/SelectableAccountList";
 export * from "./accounts/AccountRow";

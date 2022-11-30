@@ -99,7 +99,7 @@ export const ComponentStyles = {
       root: {
         borderRadius: theme.radius.lg,
         padding: theme.spacing.sm,
-        backgroundColor: theme.fn.lighten(theme.white, 0.2),
+        // backgroundColor: theme.fn.lighten(theme.white, 0.2),
       },
     }),
   },

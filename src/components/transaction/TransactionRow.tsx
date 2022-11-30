@@ -5,12 +5,12 @@ import {
   Group,
   Paper,
   Text,
+  UnstyledButton,
 } from "@mantine/core";
 import { Transaction } from "types";
 import { displayCurrency } from "utils/displayCurrency";
 import { TypeBadge } from "./TypeBadge";
 import { FaEdit } from "react-icons/fa";
-import { UpdateTransactionModal } from "./UpdateTransactionModal";
 import { useState } from "react";
 import { displayDate } from "utils/displayDate";
 import { TbCheck, TbEye } from "react-icons/tb";
@@ -22,29 +22,36 @@ type Props = {
 };
 
 export const TransactionRow = ({ transaction }: Props) => {
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
 
   const { selectedTransaction, setTransaction } = useFinance();
 
   const isSanitized = transaction.sanitizedDescription!!;
 
+  const isSelected =
+    selectedTransaction &&
+    selectedTransaction.rawDescription === transaction.rawDescription;
+
   return (
-    <>
+    <UnstyledButton
+      className={classes.paper}
+      key={transaction.rawDescription}
+      onClick={() => {
+        isSelected ? setTransaction(null) : setTransaction(transaction);
+      }}
+    >
       <Paper
-        className={classes.paper}
-        onClick={() => {
-          selectedTransaction &&
-          transaction.rawDescription == selectedTransaction.rawDescription
-            ? setTransaction(null)
-            : setTransaction(transaction);
-        }}
+        className={cx(
+          classes.paper,
+          isSelected ? classes.selected : classes.unSelected
+        )}
       >
         <Group className={classes.group}>
-          {isSanitized ? (
+          {/* {isSanitized ? (
             <TbCheck className={`${classes.icon} ${classes.tick}`} size={20} />
           ) : (
             <TbEye className={`${classes.icon} ${classes.eye}`} size={20} />
-          )}
+          )} */}
           <Group position={"center"} className={classes.dateSectionGroups}>
             <Text>{displayDate(transaction.date)}</Text>
 
@@ -71,7 +78,7 @@ export const TransactionRow = ({ transaction }: Props) => {
           </PrivacySheild>
         </Group>
       </Paper>
-    </>
+    </UnstyledButton>
   );
 };
 
@@ -107,4 +114,9 @@ const useStyles = createStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  selected: {
+    backgroundColor: theme.colors.primary[0],
+    color: theme.white,
+  },
+  unSelected: {},
 }));
