@@ -15,6 +15,7 @@ import { useState } from "react";
 import { displayDate } from "utils/displayDate";
 import { TbCheck, TbEye } from "react-icons/tb";
 import { PrivacySheild } from "components/core/PrivacySheild";
+import { useFinance } from "context";
 
 type Props = {
   transaction: Transaction;
@@ -23,17 +24,21 @@ type Props = {
 export const TransactionRow = ({ transaction }: Props) => {
   const { classes } = useStyles();
 
-  const [openEdit, setOpenEdit] = useState(false);
+  const { selectedTransaction, setTransaction } = useFinance();
+
   const isSanitized = transaction.sanitizedDescription!!;
 
   return (
     <>
-      <UpdateTransactionModal
-        opened={openEdit}
-        transaction={transaction}
-        setOpen={setOpenEdit}
-      />
-      <Paper className={classes.paper}>
+      <Paper
+        className={classes.paper}
+        onClick={() => {
+          selectedTransaction &&
+          transaction.rawDescription == selectedTransaction.rawDescription
+            ? setTransaction(null)
+            : setTransaction(transaction);
+        }}
+      >
         <Group className={classes.group}>
           {isSanitized ? (
             <TbCheck className={`${classes.icon} ${classes.tick}`} size={20} />
@@ -64,10 +69,6 @@ export const TransactionRow = ({ transaction }: Props) => {
               )}
             </Text>
           </PrivacySheild>
-
-          <ActionIcon color="blue" size="sm" onClick={() => setOpenEdit(true)}>
-            <FaEdit size={18} />
-          </ActionIcon>
         </Group>
       </Paper>
     </>

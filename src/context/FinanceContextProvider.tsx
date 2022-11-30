@@ -6,12 +6,15 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Transaction } from "types";
 
 interface FinanceContextInterface {
   displayMode: string;
   setDisplayMode: () => void;
   selectedAccount: string | null;
   setSelectedAccount: (accountName: string) => void;
+  selectedTransaction: Transaction | null;
+  setTransaction: (transaction: Transaction | null) => void;
   privacyMode: boolean;
   togglePrivacyMode: () => void;
   categories: string[];
@@ -25,6 +28,8 @@ const defaultValue = {
   setDisplayMode: () => {},
   selectedAccount: null,
   setSelectedAccount: (accountName: string) => {},
+  selectedTransaction: null,
+  setTransaction: (transaction: Transaction | null) => {},
   privacyMode: false,
   togglePrivacyMode: () => {},
   categories: [],
@@ -82,6 +87,15 @@ export const FinanceContextProvider = ({ children }: Props) => {
     });
   };
 
+  const setTransaction = (transaction: Transaction | null) => {
+    setData((prev) => {
+      return {
+        ...prev,
+        selectedTransaction: transaction,
+      };
+    });
+  };
+
   const setSelectedAccount = (account: string) => {
     setData((prev) => {
       return {
@@ -113,6 +127,7 @@ export const FinanceContextProvider = ({ children }: Props) => {
     ...defaultValue,
     setDisplayMode,
     setSelectedAccount,
+    setTransaction,
     togglePrivacyMode,
     appendCategory,
     appendSubcategories,

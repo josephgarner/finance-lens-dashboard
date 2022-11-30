@@ -26,7 +26,7 @@ export const TransactionActionCenter = () => {
   const runSanitization = useRunSanitization();
 
   const queryClient = useQueryClient();
-  const { selectedAccount } = useFinance();
+  const { selectedAccount, selectedTransaction } = useFinance();
 
   const [matchLoading, setMatchLoading] = useState(false);
 
@@ -48,7 +48,7 @@ export const TransactionActionCenter = () => {
             </ActionIcon>
           </Tooltip>
           <Tooltip label="Edit">
-            <ActionIcon size={"xl"} disabled={false}>
+            <ActionIcon size={"xl"} disabled={!selectedTransaction}>
               <TbEdit size={42} />
             </ActionIcon>
           </Tooltip>
