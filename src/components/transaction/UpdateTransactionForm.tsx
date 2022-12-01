@@ -1,30 +1,30 @@
 import {
+  Alert,
+  Button,
+  Checkbox,
   Chip,
+  Collapse,
   createStyles,
   Group,
-  Textarea,
-  TextInput,
-  Text,
-  Title,
-  Button,
-  Collapse,
-  Checkbox,
-  Alert,
   LoadingOverlay,
   MultiSelect,
+  Text,
+  Textarea,
+  TextInput,
+  Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useAddSanitizing, useUpdateTransaction } from "api";
+import { CategorySelect, SubcategorySelect } from "components";
+import { PrivacySheild } from "components/core/PrivacySheild";
+import { useFinance } from "context";
 import { Paths, TransactionType } from "enums";
+import { useEffect, useState } from "react";
+import { FaInfoCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { Sanitization, Transaction } from "types";
 import { displayCurrency } from "utils/displayCurrency";
 import { displayDate } from "utils/displayDate";
-import { FaInfoCircle } from "react-icons/fa";
-import { useAddSanitizing, useUpdateTransaction } from "api";
-import { useEffect, useState } from "react";
-import { useFinance } from "context";
-import { PrivacySheild } from "components/core/PrivacySheild";
-import { CategorySelect, SubcategorySelect } from "components";
-import { useNavigate } from "react-router-dom";
 
 type SelectType = {
   value: string;

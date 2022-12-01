@@ -3,17 +3,13 @@ import {
   Badge,
   createStyles,
   Grid,
-  Group,
   Paper,
   Text,
 } from "@mantine/core";
-import { Sanitization, Transaction } from "types";
-import { displayCurrency } from "utils/displayCurrency";
+import { Sanitization } from "types";
 import { TypeBadge } from "./TypeBadge";
 import { FaEdit } from "react-icons/fa";
-import { UpdateTransactionModal } from "./UpdateTransactionForm";
 import { useState } from "react";
-import { displayDate } from "utils/displayDate";
 import { UpdateSanitizationModal } from "./UpdateSanitizationModal";
 
 type Props = {

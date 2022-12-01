@@ -1,7 +1,6 @@
 import {
   createStyles,
   Group,
-  Loader,
   Paper,
   Title,
   UnstyledButton,
@@ -9,7 +8,7 @@ import {
 import { useListAllAccounts } from "api";
 import { LoadingError, PrivacySheild } from "components";
 import { useFinance } from "context";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { displayCurrency } from "utils/displayCurrency";
 
 export const SelectableAccountList = () => {

@@ -28,8 +28,6 @@ export const TransactionActionCenter = () => {
   const { selectedAccount, selectedTransaction } = useFinance();
 
   const [matchLoading, setMatchLoading] = useState(false);
-
-  const [openUpload, setOpenUpload] = useState(false);
   //UpdateTransaction
   return (
     <Affix className={classes.affix}>
